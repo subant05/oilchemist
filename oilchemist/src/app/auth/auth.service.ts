@@ -91,7 +91,7 @@ export class AuthService {
     }
 
     signup(email: string, password: string): Observable<AuthResponseData> {
-       return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.fb.apiKey
+       return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebase.apiKey
         , {
             email
             , password
@@ -110,7 +110,7 @@ export class AuthService {
     }
 
     login(email: string, password: string): Observable<AuthResponseData> {
-        return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.fb.apiKey
+        return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.firebase.apiKey
          , {
              email
              , password

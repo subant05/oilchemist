@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-
 import { RecipeService } from '../../recipes/recipe.service';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AuthService } from '../../auth/auth.service'
+import {take, tap} from 'rxjs/operators'
+
+
 @Component({
   selector: 'app-edit-recipe',
   templateUrl: './edit-recipe.component.html',
@@ -13,9 +17,11 @@ export class EditRecipeComponent implements OnInit {
   editMode = false;
   recipeForm: FormGroup;
 
-  constructor(    private route: ActivatedRoute,
+  constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
-    private router: Router) { }
+    private router: Router,
+    private authService: AuthService,
+    private storage: AngularFireStorage) { }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -24,13 +30,44 @@ export class EditRecipeComponent implements OnInit {
       this.initForm();
     });
   }
-  onSubmit() {
-    // if (this.editMode) {
-    //   this.recipeService.updateRecipe(this.id, this.recipeForm.value);
-    // } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
-    // }
-    this.onCancel();
+  onSubmit(event) {
+
+    this.authService.user.pipe(take(1)).subscribe(user=>{
+      const file = event.target.elements["image"].files[0];
+      const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
+      const task = this.storage.upload(filePath, file);
+     
+      const percentageChanges = task.percentageChanges().pipe(tap(data=>{
+        console.log("percentage: ", data)
+      }));
+      const snapshotChanges = task.snapshotChanges().pipe(tap(data=>{
+        console.log("snapshot: ", data)
+      }));
+
+      percentageChanges.subscribe(data=>{
+        console.log("subscription: percentage: ", data)
+
+      })
+
+      snapshotChanges.subscribe(data=>{
+        console.log("subscription: snapshotChanges: ", data)
+
+      })
+
+      task.then(data=>console.log("DATA:",data.ref.getDownloadURL().then(function(downloadURL) {
+        console.log("File available at", downloadURL);
+      })))
+      
+
+
+      // if (this.editMode) {
+      //   this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      // } else {
+      //   this.recipeService.addRecipe(this.recipeForm.value);
+      // }
+
+      // this.onCancel();
+    })
   }
 
   onCancel() {

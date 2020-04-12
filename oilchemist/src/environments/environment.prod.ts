@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  fb:{
+  firebase:{
     apiKey: "AIzaSyATxOW1ExUrKppiyZN8InMqrEYPA-G8rFc",
     authDomain: "oilchemist-20426.firebaseapp.com",
     databaseURL: "https://oilchemist-20426.firebaseio.com",

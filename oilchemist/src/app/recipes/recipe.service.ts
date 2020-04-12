@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { Recipe } from './recipe.model';
 import {environment} from '../../environments/environment'
 import {HttpClient} from '@angular/common/http'
-
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,10 @@ export class RecipeService {
 
   recipesChanged = new Subject<Recipe[]>();
   private recipes: Recipe[] = [];
-  private url: string = environment.fb.databaseURL + '/blends.json';
+  private url: string = environment.firebase.databaseURL + '/blends.json';
+  private recipeCollection: AngularFirestoreCollection<Recipe>;
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private firestore: AngularFirestore) { }
 
   
   setRecipes(recipes: Recipe[]) {
@@ -32,10 +32,13 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe) {
-    this.recipes.push(recipe);
-    this.http.post(this.url,recipe).subscribe(data=>{
-      this.recipesChanged.next(this.recipes.slice());
-    })
+    this.recipeCollection = this.firestore.collection<Recipe>('blends');
+    this.recipeCollection.add(recipe)
+
+    // this.recipes.push(recipe);
+    // this.http.post(this.url,recipe).subscribe(data=>{
+    //   this.recipesChanged.next(this.recipes.slice());
+    // })
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {

@@ -16,6 +16,9 @@ import { AccountHeaderComponent } from './account/account-header/account-header.
 import { ProfileComponent } from './account/profile/profile.component';
 import { MyRecipesComponent } from './account/my-recipes/my-recipes.component';
 import { EditRecipeComponent } from './account/edit-recipe/edit-recipe.component';
+import { AngularFireModule } from '@angular/fire';
+import {AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -37,9 +40,10 @@ import { EditRecipeComponent } from './account/edit-recipe/edit-recipe.component
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
-  providers: [],
+  providers: [ { provide: BUCKET, useValue: '' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

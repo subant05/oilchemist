@@ -11,46 +11,41 @@ export class RecipesComponent implements OnInit {
 
   recipes:Recipe[] = [
     {
-      id:"hash",
       name:"Bedtime",
       description:"Used for helping sleep",
-      ingredients:['Lavendar','Lemon','Tea Tree'],
+      oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
       picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
-      id:"hash",
       name:"Bedtime",
       description:"Used for helping sleep",
-      ingredients:['Lavendar','Lemon','Tea Tree'],
+      oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
       picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
-      id:"hash",
       name:"Bedtime",
       description:"Used for helping sleep",
-      ingredients:['Lavendar','Lemon','Tea Tree'],
+      oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
       picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
-      id:"hash",
       name:"Bedtime",
       description:"Used for helping sleep",
-      ingredients:['Lavendar','Lemon','Tea Tree'],
+      oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
       picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
-      id:"hash",
       name:"Bedtime",
       description:"Used for helping sleep",
-      ingredients:['Lavendar','Lemon','Tea Tree'],
+      oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
       picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
