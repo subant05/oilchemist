@@ -38,7 +38,7 @@ export class EditRecipeComponent implements OnInit {
   }
   private initForm() {
     let recipeName = '';
-    let recipeImagePath = '';
+    let recipeImage = '';
     let recipeDescription = '';
     let recipeOilsUsed = [];
 
@@ -65,7 +65,7 @@ export class EditRecipeComponent implements OnInit {
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, Validators.required),
       description: new FormControl(recipeDescription, Validators.required),
-      image: new FormControl(recipeImagePath, Validators.required),
+      image: new FormControl(recipeImage, Validators.required),
       oils: new FormControl(recipeOilsUsed,[Validators.required])
     });
   }
