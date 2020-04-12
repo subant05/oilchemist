@@ -32,7 +32,10 @@
               "src/assets/libraries/css/lux.css",
               "src/styles.less"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/libraries/js/jquery.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -123,13 +126,8 @@
               "devServerTarget": "oilchemist:serve:production"
             }
           }
-        },
-        "deploy": {
-          "builder": "@angular/fire:deploy",
-          "options": {}
         }
       }
-    }
-  },
+    }},
   "defaultProject": "oilchemist"
 }

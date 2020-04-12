@@ -108,8 +108,8 @@ export class EditRecipeComponent implements OnInit {
     let recipeName = '';
     let recipeImage = '';
     let recipeDescription = '';
-    let recipesApplications =[]
-    let recipeOilsUsed = new FormArray([]);
+    let recipesApplications = null
+    let recipeOilsUsed = new FormArray([],[Validators.required]);
 
     // if (this.editMode) {
     //   const recipe = this.recipeService.getRecipe(this.id);
@@ -132,10 +132,10 @@ export class EditRecipeComponent implements OnInit {
     // }
 
     this.recipeForm = new FormGroup({
-      name: new FormControl(recipeName, Validators.required),
-      description: new FormControl(recipeDescription, Validators.required),
-      imageUrl: new FormControl(recipeImage, Validators.required),
-      uses: new FormControl(recipesApplications, Validators.required),
+      name: new FormControl(recipeName, [Validators.required]),
+      description: new FormControl(recipeDescription, [Validators.required]),
+      imageUrl: new FormControl(recipeImage, [Validators.required]),
+      uses: new FormControl(recipesApplications, [Validators.required]),
       oils: recipeOilsUsed
     });
   }

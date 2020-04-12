@@ -61,13 +61,13 @@
                     *ngFor="let oilCtrl of oils; let i = index"
                     [formGroupName]="i"
                     style="margin-top: 10px;">
-                    <div class="col-xs-2">
+                    <div class="col-md-5">
                         <select class="form-control" id="oil" formControlName="brand">
                             <option value="doterra">Doterra</option>
                             <option value="young-living" selected>Young Living</option>
                         </select>
                     </div>
-                    <div class="col-xs-8">
+                    <div class="col-md-5">
                       <input
                         type="text"
                         class="form-control"
@@ -83,7 +83,7 @@
                 </div>
             </div>
             <hr>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Add Blend</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">Add Blend</button>
         </form>
     </div>
 </div>
