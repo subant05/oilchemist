@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-xl-12 form-container">
+        <h1 class="text-center">Add A Blend</h1>
+
+        <form class="">
+            <div class="form-group">
+                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <input type="email" id="name" class="form-control form-control-lg" placeholder="Blend name.." >
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <textarea id="description" class="form-control form-control-lg" placeholder="Describe your blend"></textarea>
+            </div>
+            <label class="col-sm-2 col-form-label" for="customFile">Picture</label>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile">
+                    <label class="custom-file-label" for="customFile">JPEG, GIF, PNG Only</label>
+                  </div>
+            </div>
+            <div class="form-group">
+                <label for="ingredients" class="col-sm-2 col-form-label">Oils Used</label>
+                <select class="custom-select custom-select-lg mb-3" name="ingredients" multiple>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Add Blend</button>
+        </form>
+    </div>
+</div>

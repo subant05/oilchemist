@@ -1,0 +1,21 @@
+<!-- Begin Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#"><h2>Oilchemist</h2></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse " id="navbarColor03">
+    <ul class="navbar-nav mr-auto  my-2 my-lg-0 ">
+        <li class="nav-item" routerLinkActive="active" >
+        <a class="nav-link" [routerLink]="['/account']" *ngIf="isAuthenticated">My Account</a>
+        </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+        <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="onLogin()" *ngIf="!isAuthenticated">Login</button>
+        <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="onLogout()" *ngIf="isAuthenticated">Logout</button>
+
+    </form>
+    </div>
+</nav>
+  <!-- End Navigation -->

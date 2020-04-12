@@ -1,0 +1,9 @@
+<app-recipe-search></app-recipe-search>
+  <!-- Begin Search Results -->
+  <div class="row justify-content-md-center" *ngIf="recipes && recipes.length; else noresults">
+        <app-recipe-card *ngFor="let recipe of recipes" [recipe]="recipe"></app-recipe-card>
+  </div>
+  <ng-template #noresults>
+    <div class="row">No recipes were found.</div>
+  </ng-template>
+  <!-- End Search Results -->

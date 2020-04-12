@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "oilchemist-20426": {
+      "hosting": {
+        "oilchemist": [
+          "oilchemist-20426"
+        ]
+      }
+    }
+  }
+}
