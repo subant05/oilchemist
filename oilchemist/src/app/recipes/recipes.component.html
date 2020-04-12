@@ -1,4 +1,4 @@
-<app-recipe-search></app-recipe-search>
+<app-recipe-search (search)="onSearchUpdate($event)"></app-recipe-search>
   <!-- Begin Search Results -->
   <div class="row justify-content-md-center" *ngIf="recipes$; else noresults">
         <app-recipe-card *ngFor="let recipe of recipes$ | async" [recipe]="recipe"></app-recipe-card>

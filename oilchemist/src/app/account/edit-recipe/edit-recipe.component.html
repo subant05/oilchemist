@@ -82,6 +82,13 @@
                 </div>
             </div>
             <hr>
-            <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">Add Blend</button>
+            <div class="form-row">
+                <div class="col">
+                    <button class="btn btn-lg btn-primary btn-block" type="button" (click)="onCancel()" >Cancel</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">Add Blend</button>
+                </div>
+            </div>
         </form>
     </div>

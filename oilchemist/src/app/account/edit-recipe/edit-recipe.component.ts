@@ -86,6 +86,7 @@ export class EditRecipeComponent implements OnInit {
         formData.uses = this.getUsesFromForm(event.target)
         console.log("Data for Blend",  formData);
         this.recipeService.addRecipe(formData);
+        this.onCancel();
 
       }))
       

@@ -17,9 +17,12 @@ export class RecipesComponent implements OnInit {
   constructor(private recipesService: RecipeService) { }
 
   ngOnInit(): void {
-    this.recipes$ = this.recipesService.getRecipes().pipe(tap(data=>{
-      console.log(data)
-    }))
+    this.recipes$ = this.recipesService.getRecipes()
+  }
+
+  onSearchUpdate(params){
+    console.log("Params", params)
+    this.recipes$ = this.recipesService.getRecipes(params)
   }
 
 }

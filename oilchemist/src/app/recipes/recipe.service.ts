@@ -4,6 +4,7 @@ import { Recipe } from './recipe.model';
 import {environment} from '../../environments/environment'
 import {HttpClient} from '@angular/common/http'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 export class RecipeService {
 
   recipesChanged = new Subject<Recipe[]>();
+  searchedRecipes = new Subject<Recipe[]>();
   private recipes: Recipe[] = [];
   private url: string = environment.firebase.databaseURL + '/blends.json';
   private recipeCollection: AngularFirestoreCollection<Recipe>;
@@ -26,9 +28,13 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  getRecipes(step?:string) :Observable<any>{
+  getRecipes(searchParam?:string) :Observable<any>{
     return this.firestore
-      .collection<Recipe>('blends').valueChanges()
+      .collection<Recipe>('blends'
+                          ,ref=>ref
+                               .where('name','>=', searchParam || "")
+                            ).valueChanges()
+
   }
 
   getRecipe(index: number) {
