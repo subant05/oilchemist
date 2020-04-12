@@ -12,7 +12,6 @@ import { RecipeCardComponent } from './recipes/recipe-card/recipe-card.component
 import { AuthComponent } from './auth/auth.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { AccountComponent } from './account/account.component';
-import { AccountHeaderComponent } from './account/account-header/account-header.component';
 import { ProfileComponent } from './account/profile/profile.component';
 import { MyRecipesComponent } from './account/my-recipes/my-recipes.component';
 import { EditRecipeComponent } from './account/edit-recipe/edit-recipe.component';
@@ -30,7 +29,6 @@ import { environment } from '../environments/environment';
     AuthComponent,
     RecipeDetailComponent,
     AccountComponent,
-    AccountHeaderComponent,
     ProfileComponent,
     MyRecipesComponent,
     EditRecipeComponent
