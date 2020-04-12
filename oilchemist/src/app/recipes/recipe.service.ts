@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { Recipe } from './recipe.model';
 import {environment} from '../../environments/environment'
 import {HttpClient} from '@angular/common/http'
@@ -15,7 +15,10 @@ export class RecipeService {
   private url: string = environment.firebase.databaseURL + '/blends.json';
   private recipeCollection: AngularFirestoreCollection<Recipe>;
 
-  constructor(private http: HttpClient, private firestore: AngularFirestore) { }
+
+  constructor(private http: HttpClient, private firestore: AngularFirestore) { 
+    
+  }
 
   
   setRecipes(recipes: Recipe[]) {
@@ -23,8 +26,9 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
-  getRecipes() {
-    return this.recipes.slice();
+  getRecipes(step?:string) :Observable<any>{
+    return this.firestore
+      .collection<Recipe>('blends').valueChanges()
   }
 
   getRecipe(index: number) {
@@ -32,13 +36,7 @@ export class RecipeService {
   }
 
   addRecipe(recipe: Recipe) {
-    this.recipeCollection = this.firestore.collection<Recipe>('blends');
-    this.recipeCollection.add(recipe)
-
-    // this.recipes.push(recipe);
-    // this.http.post(this.url,recipe).subscribe(data=>{
-    //   this.recipesChanged.next(this.recipes.slice());
-    // })
+    return this.firestore.collection<Recipe>('blends').add(recipe)
   }
 
   updateRecipe(index: number, newRecipe: Recipe) {

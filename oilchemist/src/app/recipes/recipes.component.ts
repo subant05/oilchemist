@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Recipe } from './recipe.model'
+import { Observable } from 'rxjs';
+import { RecipeService } from './recipe.service';
+import { tap } from 'rxjs/operators';
 
 
 @Component({
@@ -9,52 +12,14 @@ import { Recipe } from './recipe.model'
 })
 export class RecipesComponent implements OnInit {
 
-  recipes:Recipe[] = [
-    {
-      name:"Bedtime",
-      description:"Used for helping sleep",
-      oils:['Lavendar','Lemon','Tea Tree'],
-      uses:['Relaxing','Sleeping','Anxiety'],
-      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
-      creator:"John Doe"
-    },
-    {
-      name:"Bedtime",
-      description:"Used for helping sleep",
-      oils:['Lavendar','Lemon','Tea Tree'],
-      uses:['Relaxing','Sleeping','Anxiety'],
-      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
-      creator:"John Doe"
-    },
-    {
-      name:"Bedtime",
-      description:"Used for helping sleep",
-      oils:['Lavendar','Lemon','Tea Tree'],
-      uses:['Relaxing','Sleeping','Anxiety'],
-      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
-      creator:"John Doe"
-    },
-    {
-      name:"Bedtime",
-      description:"Used for helping sleep",
-      oils:['Lavendar','Lemon','Tea Tree'],
-      uses:['Relaxing','Sleeping','Anxiety'],
-      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
-      creator:"John Doe"
-    },
-    {
-      name:"Bedtime",
-      description:"Used for helping sleep",
-      oils:['Lavendar','Lemon','Tea Tree'],
-      uses:['Relaxing','Sleeping','Anxiety'],
-      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
-      creator:"John Doe"
-    }, 
-  ]
+  recipes$: Observable<Recipe[]>
   
-  constructor() { }
+  constructor(private recipesService: RecipeService) { }
 
   ngOnInit(): void {
+    this.recipes$ = this.recipesService.getRecipes().pipe(tap(data=>{
+      console.log(data)
+    }))
   }
 
 }
