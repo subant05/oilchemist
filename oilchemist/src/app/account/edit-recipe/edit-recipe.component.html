@@ -27,23 +27,62 @@
                         type="file" 
                         class="custom-file-input" 
                         id="customFile"
-                        name="image"
-                        formControlName="image">
+                        name="imageUrl"
+                        formControlName="imageUrl">
                     <label class="custom-file-label" for="customFile">JPEG, GIF, PNG Only</label>
                   </div>
             </div>
+            <label class="col-sm-2 col-form-label" for="customFile">Application</label>
             <div class="form-group">
-                <label for="ingredients" class="col-sm-2 col-form-label">Oils Used</label>
-                <select 
-                    class="custom-select custom-select-lg mb-3" 
-                    name="ingredients" 
-                    multiple
-                    formControlName="oils">
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                  </select>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="Aromatic" name="Aromatic" class="custom-control-input" formControlName="uses" value="aromatic">
+                    <label class="custom-control-label" for="Aromatic">Aromatic</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="Topical" name="Topical" class="custom-control-input" formControlName="uses" value="topical">
+                    <label class="custom-control-label" for="Topical">Topical</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" id="Internal" name="Internal" class="custom-control-input" formControlName="uses" value="internal">
+                    <label class="custom-control-label" for="Internal">Internal</label>
+                </div>
             </div>
+            <hr>
+            <div class="form-group">
+                <label for="oil" class="col-sm-2 col-form-label">Oils Used</label>
+                <button
+                type="button"
+                class="btn btn-outline-primary"
+                (click)="onAddOil()">Add Oil</button>
+            </div>
+                <div class="col-xs-12" formArrayName="oils">
+                    <div
+                    class="form-row"
+                    *ngFor="let oilCtrl of oils; let i = index"
+                    [formGroupName]="i"
+                    style="margin-top: 10px;">
+                    <div class="col-xs-2">
+                        <select class="form-control" id="oil" formControlName="brand">
+                            <option value="doterra">Doterra</option>
+                            <option value="young-living" selected>Young Living</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-8">
+                      <input
+                        type="text"
+                        class="form-control"
+                        formControlName="name">
+                    </div>
+
+                    <div class="col-xs-2">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="onDeleteOil(i)">X</button>
+                    </div>
+                </div>
+            </div>
+            <hr>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Add Blend</button>
         </form>
     </div>

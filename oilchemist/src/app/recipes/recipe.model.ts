@@ -3,7 +3,7 @@ export interface Recipe {
     description:string;
     oils:string[];
     uses:string[];
-    picture:string;
+    imageUrl:string;
     creator:string;
 }
 

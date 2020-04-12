@@ -22,6 +22,18 @@ export class EditRecipeComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private storage: AngularFireStorage) { }
+  
+  get oils(){
+    return (<FormArray>this.recipeForm.get('oils')).controls
+  }
+  
+  private getUsesFromForm(form){
+    return ['Topical','Aromatic','Internal'].map(item=>{
+      const tmpObj = {}
+      tmpObj[item] = form.elements[item].checked
+      return tmpObj
+    })
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
@@ -30,33 +42,52 @@ export class EditRecipeComponent implements OnInit {
       this.initForm();
     });
   }
+
+  onAddOil() {
+    (<FormArray>this.recipeForm.get('oils')).push(
+      new FormGroup({
+        name: new FormControl(null, Validators.required),
+        brand: new FormControl('doterra', [Validators.required])
+      })
+    );
+  }
+
+  onDeleteOil(index: number) {
+    (<FormArray>this.recipeForm.get('oils')).removeAt(index);
+  }
+
   onSubmit(event) {
 
     this.authService.user.pipe(take(1)).subscribe(user=>{
-      const file = event.target.elements["image"].files[0];
+      const file = event.target.elements["imageUrl"].files[0];
       const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
       const task = this.storage.upload(filePath, file);
      
       const percentageChanges = task.percentageChanges().pipe(tap(data=>{
-        console.log("percentage: ", data)
+        // console.log("percentage: ", data)
       }));
+
       const snapshotChanges = task.snapshotChanges().pipe(tap(data=>{
-        console.log("snapshot: ", data)
+        // console.log("snapshot: ", data)
       }));
 
       percentageChanges.subscribe(data=>{
-        console.log("subscription: percentage: ", data)
-
+        // console.log("subscription: percentage: ", data)
       })
 
       snapshotChanges.subscribe(data=>{
-        console.log("subscription: snapshotChanges: ", data)
-
+        // console.log("subscription: snapshotChanges: ", data)
       })
 
-      task.then(data=>console.log("DATA:",data.ref.getDownloadURL().then(function(downloadURL) {
-        console.log("File available at", downloadURL);
-      })))
+      task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
+        const formData = this.recipeForm.value
+        formData.imageUrl = downloadURL
+        formData.creator = user.id
+        formData.uses = this.getUsesFromForm(event.target)
+        console.log("Data for Blend",  formData);
+        this.recipeService.addRecipe(formData);
+
+      }))
       
 
 
@@ -77,7 +108,8 @@ export class EditRecipeComponent implements OnInit {
     let recipeName = '';
     let recipeImage = '';
     let recipeDescription = '';
-    let recipeOilsUsed = [];
+    let recipesApplications =[]
+    let recipeOilsUsed = new FormArray([]);
 
     // if (this.editMode) {
     //   const recipe = this.recipeService.getRecipe(this.id);
@@ -102,8 +134,9 @@ export class EditRecipeComponent implements OnInit {
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, Validators.required),
       description: new FormControl(recipeDescription, Validators.required),
-      image: new FormControl(recipeImage, Validators.required),
-      oils: new FormControl(recipeOilsUsed,[Validators.required])
+      imageUrl: new FormControl(recipeImage, Validators.required),
+      uses: new FormControl(recipesApplications, Validators.required),
+      oils: recipeOilsUsed
     });
   }
 }

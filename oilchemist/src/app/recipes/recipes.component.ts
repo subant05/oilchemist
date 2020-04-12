@@ -15,7 +15,7 @@ export class RecipesComponent implements OnInit {
       description:"Used for helping sleep",
       oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
-      picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
+      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
@@ -23,7 +23,7 @@ export class RecipesComponent implements OnInit {
       description:"Used for helping sleep",
       oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
-      picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
+      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
@@ -31,7 +31,7 @@ export class RecipesComponent implements OnInit {
       description:"Used for helping sleep",
       oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
-      picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
+      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
@@ -39,7 +39,7 @@ export class RecipesComponent implements OnInit {
       description:"Used for helping sleep",
       oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
-      picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
+      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     },
     {
@@ -47,7 +47,7 @@ export class RecipesComponent implements OnInit {
       description:"Used for helping sleep",
       oils:['Lavendar','Lemon','Tea Tree'],
       uses:['Relaxing','Sleeping','Anxiety'],
-      picture:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
+      imageUrl:"http://i.ebayimg.com/images/i/161810753939-0-1/s-l1000.jpg",
       creator:"John Doe"
     }, 
   ]
