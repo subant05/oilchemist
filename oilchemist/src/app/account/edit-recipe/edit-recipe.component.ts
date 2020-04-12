@@ -71,7 +71,7 @@ export class EditRecipeComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/my-blends'], { relativeTo: this.route });
+    this.router.navigate(['../my-blends'], { relativeTo: this.route });
   }
   private initForm() {
     let recipeName = '';
