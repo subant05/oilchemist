@@ -3,7 +3,7 @@
       <h5 class="card-header">{{recipe.name | capitalize}}</h5>
       <img [src]="recipe.imageUrl" class="card-img-top" [alt]="recipe.name">
       <div class="card-body">
-        <p class="card-text">{{recipe.description | capitalize}}</p>
+        <p class="card-text">{{recipe.description | ellipsis | capitalize}}</p>
         <!-- <a href="#" class="btn btn-primary float-right">View Recipe</a> -->
       </div>
     </div>    

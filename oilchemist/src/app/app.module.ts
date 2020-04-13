@@ -19,6 +19,7 @@ import { AngularFireModule } from '@angular/fire';
 import { BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { CapitalizePipe } from './_utils/pipes/capitalize.pipe';
+import { EllipsisPipe } from './_utils/pipes/ellipsis.pipe';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { CapitalizePipe } from './_utils/pipes/capitalize.pipe';
     ProfileComponent,
     MyRecipesComponent,
     EditRecipeComponent,
-    CapitalizePipe
+    CapitalizePipe,
+    EllipsisPipe
   ],
   imports: [
     BrowserModule,
