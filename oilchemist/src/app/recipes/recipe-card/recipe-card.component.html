@@ -1,9 +1,9 @@
-<div class="col-sm">
-    <div class="card" style="width: 18rem;">
-      <h5 class="card-header">{{recipe.name}}</h5>
+<div class="col-sm card-wrapper" (click)="onGetDetails()">
+    <div class="card shadow-sm" style="width: 18rem;">
+      <h5 class="card-header">{{recipe.name | capitalize}}</h5>
       <img [src]="recipe.imageUrl" class="card-img-top" [alt]="recipe.name">
       <div class="card-body">
-        <p class="card-text">{{recipe.description}}</p>
+        <p class="card-text">{{recipe.description | capitalize}}</p>
         <!-- <a href="#" class="btn btn-primary float-right">View Recipe</a> -->
       </div>
     </div>    

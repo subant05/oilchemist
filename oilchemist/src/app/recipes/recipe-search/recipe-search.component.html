@@ -1,18 +1,18 @@
   <!-- Begin Search Form -->
   <div class="row recipes-search">
     <form class="form-inline" [formGroup]='searchForm' (ngSubmit)="onSearch()">
-      <div class="form-group col-10">
+      <div class="form-group col-12">
         <input 
             type="text" 
             value="" 
-            class="form-control" 
+            class="form-control shadow-sm" 
             id="search" 
             placeholder="Search for a blend"
             formControlName="search"
-            >
+            (keyup)="onSearch()">
       </div>
-      <div class="form-group col-2">
-       <button class="btn btn-primary" type="submit">Search</button>
+      <div class="form-group col-2" *ngIf="false">
+       <button class="btn btn-primary  shadow-sm" type="submit">Search</button>
       </div>
     </form>
   </div>

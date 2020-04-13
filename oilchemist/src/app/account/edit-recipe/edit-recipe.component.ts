@@ -81,13 +81,13 @@ export class EditRecipeComponent implements OnInit {
 
       task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
         const formData = this.recipeForm.value
+        formData.name = formData.name.toLowerCase()
+        formData.description = formData.description.toLowerCase()
         formData.imageUrl = downloadURL
         formData.creator = user.id
-        formData.uses = this.getUsesFromForm(event.target)
-        console.log("Data for Blend",  formData);
-        this.recipeService.addRecipe(formData);
-        this.onCancel();
-
+        this.recipeService.addRecipe(formData).then(success=>{
+          this.onCancel();
+        });
       }))
       
 
@@ -109,7 +109,11 @@ export class EditRecipeComponent implements OnInit {
     let recipeName = '';
     let recipeImage = '';
     let recipeDescription = '';
-    let recipesApplications = null
+    let recipesApplications = {
+      topical:false,
+      aromatic:false,
+      internal:false
+    }
     let recipeOilsUsed = new FormArray([],[Validators.required]);
 
     // if (this.editMode) {
@@ -136,7 +140,12 @@ export class EditRecipeComponent implements OnInit {
       name: new FormControl(recipeName, [Validators.required]),
       description: new FormControl(recipeDescription, [Validators.required]),
       imageUrl: new FormControl(recipeImage, [Validators.required]),
-      uses: new FormControl(recipesApplications, [Validators.required]),
+      uses: new FormGroup({
+        topical: new FormControl(recipesApplications.topical, [Validators.required]),
+        aromatic: new FormControl(recipesApplications.aromatic, [Validators.required]),
+        internal: new FormControl(recipesApplications.internal)
+      },[Validators.required]),
+          
       oils: recipeOilsUsed
     });
   }

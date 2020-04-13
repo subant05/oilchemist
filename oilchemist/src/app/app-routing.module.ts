@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RecipesComponent } from './recipes/recipes.component';
+import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { AuthComponent } from './auth/auth.component';
 import { AccountComponent } from './account/account.component';
 import { AuthGuard } from './auth/auth.guard';
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path:"",
     component:RecipesComponent
+  }
+  ,{
+    path:"blend/:id",
+    component:RecipeDetailComponent
   }
   , {
     path:"login",

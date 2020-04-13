@@ -16,8 +16,9 @@ import { ProfileComponent } from './account/profile/profile.component';
 import { MyRecipesComponent } from './account/my-recipes/my-recipes.component';
 import { EditRecipeComponent } from './account/edit-recipe/edit-recipe.component';
 import { AngularFireModule } from '@angular/fire';
-import {AngularFireStorageModule, BUCKET } from '@angular/fire/storage';
+import { BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
+import { CapitalizePipe } from './_utils/pipes/capitalize.pipe';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { environment } from '../environments/environment';
     AccountComponent,
     ProfileComponent,
     MyRecipesComponent,
-    EditRecipeComponent
+    EditRecipeComponent,
+    CapitalizePipe
   ],
   imports: [
     BrowserModule,
