@@ -23,7 +23,6 @@ export class RecipeService {
   }
 
   private filterSearchResults(data:  Recipe[], searchParam: string) : Recipe[]{
-    console.log(data)
     if(!searchParam)
       return data;
 

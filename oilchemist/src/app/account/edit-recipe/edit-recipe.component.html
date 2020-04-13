@@ -27,8 +27,9 @@
                         class="custom-file-input" 
                         id="customFile"
                         name="imageUrl"
-                        formControlName="imageUrl">
-                    <label class="custom-file-label" for="customFile">JPEG, GIF, PNG Only</label>
+                        formControlName="imageUrl"                        
+                        (change)="onFileChange($event)">
+                        <label class="custom-file-label" for="customFile">{{fileFormLabel}}</label>
                   </div>
             </div>
             <label class="col-sm-2 col-form-label" for="customFile">Application</label>

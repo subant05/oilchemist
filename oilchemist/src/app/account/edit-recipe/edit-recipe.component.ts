@@ -16,6 +16,7 @@ export class EditRecipeComponent implements OnInit {
   id: number;
   editMode = false;
   recipeForm: FormGroup;
+  fileFormLabel = 'Images Only'
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -105,6 +106,11 @@ export class EditRecipeComponent implements OnInit {
   onCancel() {
     this.router.navigate(['../my-blends'], { relativeTo: this.route });
   }
+  
+  onFileChange(event){
+    this.fileFormLabel = event.target.files[0].name
+  }
+
   private initForm() {
     let recipeName = '';
     let recipeImage = '';
