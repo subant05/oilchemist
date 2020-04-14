@@ -20,6 +20,7 @@ import { BUCKET } from '@angular/fire/storage';
 import { environment } from '../environments/environment';
 import { CapitalizePipe } from './_utils/pipes/capitalize.pipe';
 import { EllipsisPipe } from './_utils/pipes/ellipsis.pipe';
+import { RecipePaginationComponent } from './recipes/recipe-pagination/recipe-pagination.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { EllipsisPipe } from './_utils/pipes/ellipsis.pipe';
     MyRecipesComponent,
     EditRecipeComponent,
     CapitalizePipe,
-    EllipsisPipe
+    EllipsisPipe,
+    RecipePaginationComponent
   ],
   imports: [
     BrowserModule,

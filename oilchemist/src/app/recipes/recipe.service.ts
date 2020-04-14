@@ -5,6 +5,7 @@ import {environment} from '../../environments/environment'
 import {HttpClient} from '@angular/common/http'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { tap, map, filter } from 'rxjs/operators';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +28,23 @@ export class RecipeService {
       return data;
 
     return data.filter(item=>{
-      return item.name.indexOf(searchParam) >= 0 
-              || item.description.indexOf(searchParam) >= 0
+      return item.name.indexOf(searchParam.toLocaleLowerCase()) >= 0 
+              || item.description.indexOf(searchParam.toLocaleLowerCase()) >= 0
               || Object.keys(item.uses).filter(key=>{
-                  return key.indexOf(searchParam) >= 0 && item.uses[key]
+                  return key.toLocaleLowerCase().indexOf(searchParam.toLocaleLowerCase()) >= 0 && item.uses[key]
+              }).length
+              || item.oils.filter((obj: any)=>{
+                return  obj.brand.includes(searchParam)
+                  || obj.name.includes(searchParam)
+                  || searchParam.toLocaleLowerCase().includes(obj.brand.toLocaleLowerCase()) 
+                  || searchParam.toLocaleLowerCase().includes(obj.name.toLocaleLowerCase()) 
               }).length
     })
   }
+
+
+  
+
   
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
@@ -41,15 +52,25 @@ export class RecipeService {
   }
 
 
-  getRecipes(searchParam?:string) :Observable<any>{
-
+  getRecipes(searchParam?:string, startAt?: string) :Observable<any>{
     return this.firestore
       .collection<Recipe>(
             'blends'
             ,ref=>{
-              ref.where('name','>=', searchParam || "")
-              ref.where('description','>=', searchParam || "")
-              return ref
+              // ref.where('name','>=', searchParam ? searchParam.toLocaleLowerCase() : "")
+              // ref.where('description','>=',  searchParam ? searchParam.toLocaleLowerCase() : "")
+
+              // if(startAt)
+              //   ref.startAfter(startAt ? startAt : '')
+
+              // ref.orderBy('name', 'asc').limit(2)
+
+              // return ref
+                
+              return ref.where('name','>=', searchParam ? searchParam.toLocaleLowerCase() : "")
+                        .orderBy('name', 'asc')
+                        .startAt(startAt ? startAt : '')
+                        .limit(4)
             }
           )
           .snapshotChanges()
