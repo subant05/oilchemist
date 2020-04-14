@@ -1,7 +1,7 @@
     <div class="col-xl-12 form-container">
         <h1 class="text-center">{{this.editMode ? 'Edit Blend' : 'Add A Blend'}}</h1>
 
-        <form [formGroup]="recipeForm" (ngSubmit)="onSubmit($event)">
+        <form [formGroup]="recipeForm" (ngSubmit)="onSubmit($event)" *ngIf="showForm">
             <div class="form-group">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
                 <input 
@@ -20,6 +20,9 @@
                     formControlName="description"></textarea>
             </div>
             <label class="col-sm-2 col-form-label" for="customFile">Picture</label>
+            <div *ngIf="editMode">
+                <img [src]="recipe.imageUrl" *ngIf="recipe.imageUrl">
+            </div>
             <div class="form-group">
                 <div class="custom-file">
                     <input 

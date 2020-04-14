@@ -5,6 +5,7 @@ import { RecipeService } from '../../recipes/recipe.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from '../../auth/auth.service'
 import {take, tap} from 'rxjs/operators'
+import { Recipe } from 'src/app/recipes/recipe.model';
 
 
 @Component({
@@ -13,10 +14,12 @@ import {take, tap} from 'rxjs/operators'
   styleUrls: ['./edit-recipe.component.less']
 })
 export class EditRecipeComponent implements OnInit {
-  id: number;
+  id: string;
   editMode = false;
+  recipe: Recipe;
   recipeForm: FormGroup;
   fileFormLabel = 'Images Only'
+  showForm: boolean = false
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -38,9 +41,16 @@ export class EditRecipeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.id = +params['id'];
+      this.id = params['id'];
       this.editMode = params['id'] != null;
-      this.initForm();
+      if(this.editMode ) {
+        this.recipeService.getRecipe(params['id']).subscribe(data=>{
+          this.recipe = data
+          this.initForm();
+        });
+      } else{
+        this.initForm();
+      }
     });
   }
 
@@ -116,25 +126,28 @@ export class EditRecipeComponent implements OnInit {
     }
     let recipeOilsUsed = new FormArray([],[Validators.required]);
 
-    // if (this.editMode) {
-    //   const recipe = this.recipeService.getRecipe(this.id);
-    //   recipeName = recipe.name;
-    //   recipeImagePath = recipe.imagePath;
-    //   recipeDescription = recipe.description;
-    //   if (recipe['ingredients']) {
-    //     for (let ingredient of recipe.ingredients) {
-    //       recipeIngredients.push(
-    //         new FormGroup({
-    //           name: new FormControl(ingredient.name, Validators.required),
-    //           amount: new FormControl(ingredient.amount, [
-    //             Validators.required,
-    //             Validators.pattern(/^[1-9]+[0-9]*$/)
-    //           ])
-    //         })
-    //       );
-    //     }
-    //   }
-    // }
+    if (this.editMode && this.recipe) {
+      recipeName = this.recipe.name;
+      recipeDescription = this.recipe.description;
+      if (this.recipe['oils']) {
+        for (let oil of this.recipe.oils) {
+          recipeOilsUsed.push(
+            new FormGroup({
+              name: new FormControl(oil.name, Validators.required),
+              brand: new FormControl(oil.brand, [
+                Validators.required,
+                Validators.pattern(/^[1-9]+[0-9]*$/)
+              ])
+            })
+          );
+        }
+      }
+      recipesApplications = {
+        topical:this.recipe.uses.topical,
+        aromatic:this.recipe.uses.aromatic,
+        internal:this.recipe.uses.internal
+      }
+    }
 
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, [Validators.required]),
@@ -148,5 +161,7 @@ export class EditRecipeComponent implements OnInit {
           
       oils: recipeOilsUsed
     });
+
+    this.showForm = true
   }
 }
