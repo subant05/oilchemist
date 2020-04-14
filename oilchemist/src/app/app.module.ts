@@ -21,6 +21,7 @@ import { environment } from '../environments/environment';
 import { CapitalizePipe } from './_utils/pipes/capitalize.pipe';
 import { EllipsisPipe } from './_utils/pipes/ellipsis.pipe';
 import { RecipePaginationComponent } from './recipes/recipe-pagination/recipe-pagination.component';
+import { DaysAgoPipe } from './_utils/pipes/days-ago.pipe';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { RecipePaginationComponent } from './recipes/recipe-pagination/recipe-pa
     EditRecipeComponent,
     CapitalizePipe,
     EllipsisPipe,
-    RecipePaginationComponent
+    RecipePaginationComponent,
+    DaysAgoPipe
   ],
   imports: [
     BrowserModule,

@@ -34,8 +34,8 @@ export class RecipeService {
       return data;
 
     return data.filter(item=>{
-      return item.name.indexOf(searchParam.toLocaleLowerCase()) >= 0 
-              || item.description.indexOf(searchParam.toLocaleLowerCase()) >= 0
+      return item.name.toLocaleLowerCase().indexOf(searchParam.toLocaleLowerCase()) >= 0 
+              || item.description.toLocaleLowerCase().indexOf(searchParam.toLocaleLowerCase()) >= 0
               || Object.keys(item.uses).filter(key=>{
                   return key.toLocaleLowerCase().indexOf(searchParam.toLocaleLowerCase()) >= 0 && item.uses[key]
               }).length
@@ -73,8 +73,7 @@ export class RecipeService {
 
               // return ref
                 
-              return ref.where('name','>=', queryParams.search ? queryParams.search.toLocaleLowerCase() : "")
-                        .orderBy('name', 'asc')
+              return ref.orderBy('name', 'asc')
                         .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
                         .limit(12)
             }
@@ -101,9 +100,9 @@ export class RecipeService {
     return this.firestore.collection<Recipe>('blends').add(recipe)
   }
 
-  updateRecipe(index: number, newRecipe: Recipe) {
-    this.recipes[index] = newRecipe;
-    this.recipesChanged.next(this.recipes.slice());
+  updateRecipe(id: string, recipe: Recipe): Promise<any>{
+    return this.firestore
+          .collection<Recipe>('blends').doc(id).update(recipe)
   }
 
   deleteRecipe(index: number) {

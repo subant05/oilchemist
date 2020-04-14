@@ -21,7 +21,7 @@
             </div>
             <label class="col-sm-2 col-form-label" for="customFile">Picture</label>
             <div *ngIf="editMode">
-                <img [src]="recipe.imageUrl" *ngIf="recipe.imageUrl">
+                <img [src]="recipe.imageUrl" *ngIf="recipe && recipe.imageUrl">
             </div>
             <div class="form-group">
                 <div class="custom-file">

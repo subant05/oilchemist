@@ -9,7 +9,7 @@
             (click)="getDetails(i)">
                 <div class="d-flex w-100 justify-content-between">
                     <h4 class="mb-1">{{recipe.name | capitalize}}</h4>
-                    <small>3 days ago</small>
+                    <small>{{recipe.modified | daysAgo}}</small>
                 </div>
                 <p class="mb-1">{{recipe.description | capitalize}}</p>
                 <span  *ngFor="let useKey of Object.keys(recipe.uses)">

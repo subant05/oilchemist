@@ -67,51 +67,63 @@ export class EditRecipeComponent implements OnInit {
     (<FormArray>this.recipeForm.get('oils')).removeAt(index);
   }
 
+  private formatFormData(creator:string, imageUrl: string){
+    const formData = this.recipeForm.value
+    formData.name = formData.name
+    formData.description = formData.description
+    formData.searchableName =  formData.name.toLowerCase()
+    formData.searchableDescription = formData.name.toLowerCase()
+    formData.imageUrl = imageUrl
+    formData.modified = new Date().toUTCString()
+    formData.creator = creator
+    if(!this.editMode)
+      formData.created = formData.modified  
+
+    return formData
+  }
+
   onSubmit(event) {
 
-    this.authService.user.pipe(take(1)).subscribe(user=>{
-      const file = event.target.elements["imageUrl"].files[0];
-      const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
-      const task = this.storage.upload(filePath, file);
-     
-      const percentageChanges = task.percentageChanges().pipe(tap(data=>{
-        // console.log("percentage: ", data)
-      }));
+    if(this.editMode && this.recipe.imageUrl){
+      const formData = this.formatFormData(this.recipe.creator, this.recipe.imageUrl)
 
-      const snapshotChanges = task.snapshotChanges().pipe(tap(data=>{
-        // console.log("snapshot: ", data)
-      }));
-
-      percentageChanges.subscribe(data=>{
-        // console.log("subscription: percentage: ", data)
+      this.recipeService.updateRecipe(this.id, formData).then(()=>{
+        this.onCancel()
       })
 
-      snapshotChanges.subscribe(data=>{
-        // console.log("subscription: snapshotChanges: ", data)
+    } else {
+      this.authService.user.pipe(take(1)).subscribe(user=>{
+        const file = event.target.elements["imageUrl"].files[0];
+        const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
+        const task = this.storage.upload(filePath, file);
+       
+        task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
+          const formData = this.formatFormData(user.id, downloadURL)
+
+          if (this.editMode) {
+            this.recipeService.updateRecipe(this.id, formData).then(()=>{
+              this.onCancel()
+            })
+          } else{
+            this.recipeService.addRecipe(formData).then(success=>{
+              this.onCancel();
+            });
+          }
+
+        }))
       })
+    }
 
-      task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
-        const formData = this.recipeForm.value
-        formData.name = formData.name.toLowerCase()
-        formData.description = formData.description.toLowerCase()
-        formData.imageUrl = downloadURL
-        formData.creator = user.id
-        if (this.editMode) {
 
-        } else{
-          this.recipeService.addRecipe(formData).then(success=>{
-            this.onCancel();
-          });
-        }
-      }))
-    })
   }
 
   onCancel() {
-    this.router.navigate(['../my-blends'], { relativeTo: this.route });
+    this.router.navigate(['/account/my-blends'], { relativeTo: this.route });
   }
   
   onFileChange(event){
+    if(this.recipe && this.recipe.imageUrl)
+      this.recipe.imageUrl = null;
     this.fileFormLabel = event.target.files[0].name
   }
 
@@ -133,11 +145,8 @@ export class EditRecipeComponent implements OnInit {
         for (let oil of this.recipe.oils) {
           recipeOilsUsed.push(
             new FormGroup({
-              name: new FormControl(oil.name, Validators.required),
-              brand: new FormControl(oil.brand, [
-                Validators.required,
-                Validators.pattern(/^[1-9]+[0-9]*$/)
-              ])
+              name: new FormControl(oil.name, [Validators.required]),
+              brand: new FormControl(oil.brand, [Validators.required])
             })
           );
         }
@@ -152,7 +161,7 @@ export class EditRecipeComponent implements OnInit {
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, [Validators.required]),
       description: new FormControl(recipeDescription, [Validators.required]),
-      imageUrl: new FormControl(recipeImage, [Validators.required]),
+      imageUrl: new FormControl(recipeImage, []),
       uses: new FormGroup({
         topical: new FormControl(recipesApplications.topical, [Validators.required]),
         aromatic: new FormControl(recipesApplications.aromatic, [Validators.required]),
