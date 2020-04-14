@@ -41,7 +41,7 @@ const routes: Routes = [
         component:EditRecipeComponent
       },
       {
-        path:'edit-blend',
+        path:'edit-blend/:id',
         component:EditRecipeComponent
       },
       {

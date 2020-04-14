@@ -4,7 +4,9 @@
       <img [src]="recipe.imageUrl" class="card-img-top" [alt]="recipe.name">
       <div class="card-body">
         <p class="card-text">{{recipe.description | ellipsis | capitalize}}</p>
-        <!-- <a href="#" class="btn btn-primary float-right">View Recipe</a> -->
+        <span  *ngFor="let useKey of Object.keys(recipe.uses)">
+          <small class="use badge badge-light" *ngIf="recipe.uses[useKey]" >{{useKey | capitalize}}</small>
+        </span>
       </div>
     </div>    
   </div>

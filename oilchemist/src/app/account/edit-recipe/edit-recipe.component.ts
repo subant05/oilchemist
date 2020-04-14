@@ -86,20 +86,14 @@ export class EditRecipeComponent implements OnInit {
         formData.description = formData.description.toLowerCase()
         formData.imageUrl = downloadURL
         formData.creator = user.id
-        this.recipeService.addRecipe(formData).then(success=>{
-          this.onCancel();
-        });
+        if (this.editMode) {
+
+        } else{
+          this.recipeService.addRecipe(formData).then(success=>{
+            this.onCancel();
+          });
+        }
       }))
-      
-
-
-      // if (this.editMode) {
-      //   this.recipeService.updateRecipe(this.id, this.recipeForm.value);
-      // } else {
-      //   this.recipeService.addRecipe(this.recipeForm.value);
-      // }
-
-      // this.onCancel();
     })
   }
 

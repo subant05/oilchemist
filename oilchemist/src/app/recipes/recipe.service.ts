@@ -5,7 +5,13 @@ import {environment} from '../../environments/environment'
 import {HttpClient} from '@angular/common/http'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { tap, map, filter } from 'rxjs/operators';
-import { stringify } from 'querystring';
+
+interface QueryParams {
+  search?: string;
+  startAfter?: string;
+  creator?: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +58,7 @@ export class RecipeService {
   }
 
 
-  getRecipes(searchParam?:string, startAt?: string) :Observable<any>{
+  getRecipes(queryParams:QueryParams ={}) :Observable<any>{
     return this.firestore
       .collection<Recipe>(
             'blends'
@@ -67,9 +73,9 @@ export class RecipeService {
 
               // return ref
                 
-              return ref.where('name','>=', searchParam ? searchParam.toLocaleLowerCase() : "")
+              return ref.where('name','>=', queryParams.search ? queryParams.search.toLocaleLowerCase() : "")
                         .orderBy('name', 'asc')
-                        .startAfter(startAt ? startAt : '')
+                        .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
                         .limit(12)
             }
           )
@@ -81,7 +87,7 @@ export class RecipeService {
                   return { id, ...data };
                 });
               }),
-              map(data=>this.filterSearchResults(data, searchParam) )
+              map(data=>this.filterSearchResults(data, queryParams.search) )
           )
   }
 

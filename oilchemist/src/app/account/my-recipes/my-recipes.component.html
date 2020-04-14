@@ -1,1 +1,62 @@
-<p>my-recipes works!</p>
+
+<app-recipe-search (search)="onSearchUpdate($event)"></app-recipe-search>
+<div *ngIf="recipeTracker.length; else norecipes">
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action"  
+            data-toggle="modal" 
+            data-target="#details"
+            *ngFor="let recipe of recipeTracker.array; let i = index;"
+            (click)="getDetails(i)">
+                <div class="d-flex w-100 justify-content-between">
+                    <h4 class="mb-1">{{recipe.name | capitalize}}</h4>
+                    <small>3 days ago</small>
+                </div>
+                <p class="mb-1">{{recipe.description | capitalize}}</p>
+                <span  *ngFor="let useKey of Object.keys(recipe.uses)">
+                    <small class="use badge badge-primary" *ngIf="recipe.uses[useKey]" >{{useKey | capitalize}}</small>
+                </span>
+        </a>
+    </div>
+    <!-- Modal -->
+    <div *ngIf="modalData" class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="details" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-3 mx-auto">
+                    <h3 class="card-header">{{modalData.name}}</h3>
+                    <img style="width: 100%; display: block;" [src]="modalData.imageUrl" [alt]="modalData.name">
+                    <div class="card-body">
+                      <p class="card-text text-left">{{modalData.description | capitalize}}</p>
+                    </div>
+                    <div class="card-footer text-muted text-center ">Oils</div>
+                    <ul class="list-group list-group-flush" *ngFor="let oil of modalData.oils; let i = index;">
+                      <li class="list-group-item">
+                          <span>{{oil.brand | capitalize}}</span> : 
+                          <span>{{oil.name}}</span>
+                      </li>
+                    </ul>
+                    <div class="card-footer text-muted text-center ">Usage</div>
+                    <ul class="list-group list-group-flush" *ngFor="let use of Object.keys(modalData.uses)">
+                        <li class="list-group-item" *ngIf="modalData.uses[use]">
+                            <span>{{use | capitalize}}</span>
+                        </li>
+                      </ul>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-secondary"  data-dismiss="modal" [routerLink]="['/account','edit-blend',modalData.id]">Edit</a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <app-recipe-pagination (bottom)="onLoadMore()"></app-recipe-pagination>
+</div>
+<ng-template #norecipes>
+    Please add your recipes
+</ng-template>

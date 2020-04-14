@@ -1,5 +1,5 @@
     <div class="col-xl-12 form-container">
-        <h1 class="text-center">Add A Blend</h1>
+        <h1 class="text-center">{{this.editMode ? 'Edit Blend' : 'Add A Blend'}}</h1>
 
         <form [formGroup]="recipeForm" (ngSubmit)="onSubmit($event)">
             <div class="form-group">
@@ -88,7 +88,7 @@
                     <button class="btn btn-lg btn-primary btn-block" type="button" (click)="onCancel()" >Cancel</button>
                 </div>
                 <div class="col">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">Add Blend</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">{{this.editMode ? 'Update' : 'Save'}}</button>
                 </div>
             </div>
         </form>
