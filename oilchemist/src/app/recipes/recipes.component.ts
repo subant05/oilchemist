@@ -18,6 +18,7 @@ export class RecipesComponent implements OnInit {
     array:[]
   }
   private searchParams = ''
+  private isQuerying = false;
   
   constructor(private recipesService: RecipeService) { }
   private updateRecipeTracker(data){
@@ -34,7 +35,6 @@ export class RecipesComponent implements OnInit {
 
   ngOnInit(): void {
     this.recipesService.getRecipes().subscribe(data=>{
-      console.log(JSON.stringify(data[1]))
       this.updateRecipeTracker(data)
     })
   }
@@ -43,21 +43,23 @@ export class RecipesComponent implements OnInit {
   onSearchUpdate(params){
     this.searchParams = params
     this.recipesService.getRecipes(this.searchParams).subscribe(data=>{
-      console.log(data)
       this.replaceRecipeTracker(data)
     })
   }
 
   onLoadMore(){
-    this.recipesService.getRecipes(this.searchParams, this.recipeTracker.array[this.recipeTracker.length-1].name).subscribe(data=>{
-      console.log(JSON.stringify(data[1]))
-      this.updateRecipeTracker(data)
-    })
-    // this.recipes$.pipe(take(1)).subscribe(data=>{
-    //   console.log(data, this.recipes$)
-    //    this.recipes$ = this.recipesService.getRecipes(this.searchParams)
-
-    // })
+    if(this.isQuerying)
+      return;
+    this.isQuerying = true
+    this.recipesService.getRecipes(
+        this.searchParams, 
+        this.recipeTracker.array[this.recipeTracker.length-1].name)
+        .subscribe(data=>{
+            if(data[0] && this.recipeTracker.array[this.recipeTracker.length-1].id != data[data.length-1].id){
+              this.updateRecipeTracker(data)
+            }
+            this.isQuerying = false
+        })
   }
 
 }

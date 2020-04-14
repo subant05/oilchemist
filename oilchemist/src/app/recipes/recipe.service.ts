@@ -69,8 +69,8 @@ export class RecipeService {
                 
               return ref.where('name','>=', searchParam ? searchParam.toLocaleLowerCase() : "")
                         .orderBy('name', 'asc')
-                        .startAt(startAt ? startAt : '')
-                        .limit(4)
+                        .startAfter(startAt ? startAt : '')
+                        .limit(12)
             }
           )
           .snapshotChanges()
