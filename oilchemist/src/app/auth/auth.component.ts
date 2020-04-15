@@ -44,13 +44,6 @@ export class AuthComponent implements OnInit {
                             )
   }
 
-  private confrmPasswordMatch(control: FormControl): {[s: string]: boolean} {
-    if(control.value !== this.password){
-      return {"passwordsDoNotMatch":true}
-    }
-    return null;
-  }
-
   private confirmPasswordValidation(control){
     if( !this.signUpForm)
       return null
@@ -73,26 +66,14 @@ export class AuthComponent implements OnInit {
   onSwitchLoginState(){
     this.isLoginMode = !this.isLoginMode
 
-    switch(this.isLoginMode) {
-      case false:
+    if(!this.isLoginMode && !this.signUpForm )
         this.signUpForm =  new FormGroup({
               login: new FormGroup({
                 email: new FormControl(null,[Validators.email,Validators.required])
                 , password: new FormControl(null, [Validators.required, Validators.minLength(6)])
-                , confirmPassword: new FormControl(null, [Validators.required, Validators.minLength(6),this.confirmPasswordValidation.bind(this)])
+                , confirmPassword: new FormControl(null, [Validators.required, this.confirmPasswordValidation.bind(this)])
               })
           })
-          break;
-      default:
-        this.signInForm =  new FormGroup({
-              login: new FormGroup({
-                email: new FormControl(null,[Validators.email,Validators.required])
-                , password: new FormControl(null, [Validators.required, Validators.minLength(6)])
-              })
-          })
-        break;
-
-    }
   }
 
   

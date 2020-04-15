@@ -9,7 +9,11 @@
                     id="name" 
                     class="form-control form-control-lg" 
                     placeholder="Blend name.." 
-                    formControlName="name">
+                    formControlName="name"
+                    [class]="{'is-invalid': !recipeForm.get('name').valid && recipeForm.get('name').touched}">
+                    <div class="invalid-feedback">
+                        Please enter a name for your blend.
+                    </div>
             </div>
             <div class="form-group">
                 <label for="description" class="col-sm-2 col-form-label">Description</label>
@@ -17,7 +21,11 @@
                     id="description" 
                     class="form-control form-control-lg" 
                     placeholder="Describe your blend"
-                    formControlName="description"></textarea>
+                    formControlName="description"
+                    [class]="{'is-invalid': !recipeForm.get('description').valid && recipeForm.get('description').touched}"></textarea>
+                    <div class="invalid-feedback">
+                        Please enter a description for your blend.
+                    </div>
             </div>
             <label class="col-sm-2 col-form-label" for="customFile">Picture</label>
             <div *ngIf="editMode">
@@ -32,6 +40,10 @@
                         name="imageUrl"
                         formControlName="imageUrl"                        
                         (change)="onFileChange($event)">
+                        <div class="invalid-feedback"
+                        [style]="{'display': !recipeForm.get('imageUrl').valid && recipeForm.get('imageUrl').touched ? 'block' : 'none'}">
+                            Please enter a upload a photo for your blend.
+                        </div>
                         <label class="custom-file-label" for="customFile">{{fileFormLabel}}</label>
                   </div>
             </div>
@@ -49,10 +61,13 @@
                     <input type="checkbox" id="Internal" name="Internal" class="custom-control-input" formControlName="internal" value="internal">
                     <label class="custom-control-label" for="Internal">Internal</label>
                 </div>
+                <div class="invalid-feedback" [style]="{'display': !recipeForm.get('uses.aromatic').value && !recipeForm.get('uses.topical').value && !recipeForm.get('uses.internal').value  && (recipeForm.get('uses.internal').touched || recipeForm.get('uses.internal').touched || recipeForm.get('uses.internal').touched)? 'block' : 'none'}">
+                    Please enter select a application
+                </div>
             </div>
             <hr>
             <div class="form-group">
-                <label for="oil" class="col-sm-2 col-form-label">Oils Used</label>
+                <label for="oil" class="col-sm-2 col-form-label">Oils</label>
                 <button
                 type="button"
                 class="btn btn-outline-primary"
@@ -65,10 +80,15 @@
                     [formGroupName]="i"
                     style="margin-top: 10px;">
                     <div class="col-md-5">
-                        <select class="form-control" id="oil" formControlName="brand">
-                            <option value="doterra">Doterra</option>
-                            <option value="young living" selected>Young Living</option>
+                        <select 
+                            class="form-control" 
+                            id="oil" 
+                            formControlName="brand"
+                            (change)="onBrandChange($event)">
+                                <option [value]="brand.value"  *ngFor="let brand of oilBrands">{{brand.label}}</option>
+                                <option value="other" selected>Other</option>
                         </select>
+                        <input type="hidden" class="form-control" formControlName="brand">
                     </div>
                     <div class="col-md-5">
                       <input
@@ -84,6 +104,9 @@
                         (click)="onDeleteOil(i)">X</button>
                     </div>
                 </div>
+            </div>
+            <div class="invalid-feedback"  [style]="{'display': recipeForm.get('oils').touched && !recipeForm.get('oils').value.length ? 'block' : 'none'}">
+                Please add an oil to your blend.
             </div>
             <hr>
             <div class="form-row">

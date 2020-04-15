@@ -6,6 +6,7 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from '../../auth/auth.service'
 import {take, tap} from 'rxjs/operators'
 import { Recipe } from 'src/app/recipes/recipe.model';
+import { element } from 'protractor';
 
 
 @Component({
@@ -20,6 +21,10 @@ export class EditRecipeComponent implements OnInit {
   recipeForm: FormGroup;
   fileFormLabel = 'Images Only'
   showForm: boolean = false
+  oilBrands:{label:string, value:string}[] = [
+    {value:"doterra", label:"Doterra"}
+    , {value:"young living", label:"young living"}
+  ]
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -80,6 +85,15 @@ export class EditRecipeComponent implements OnInit {
       formData.created = formData.modified  
 
     return formData
+  }
+
+  onBrandChange(event: any){
+      if(event.target.value === "other"){
+        event.target.nextElementSibling.value = ""
+        event.target.nextElementSibling.type = "text"
+        event.target.parentNode.removeChild(event.target)
+        
+      }
   }
 
   onSubmit(event) {
@@ -143,6 +157,13 @@ export class EditRecipeComponent implements OnInit {
       recipeDescription = this.recipe.description;
       if (this.recipe['oils']) {
         for (let oil of this.recipe.oils) {
+          debugger;
+          if(!this.oilBrands.find(item=>{
+            return oil.brand === item.value || oil.brand === item.label
+          })){
+            this.oilBrands.push({value:oil.brand, label:oil.brand})
+          }
+
           recipeOilsUsed.push(
             new FormGroup({
               name: new FormControl(oil.name, [Validators.required]),
