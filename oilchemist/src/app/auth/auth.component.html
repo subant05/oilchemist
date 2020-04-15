@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xl-12 form-container">
         <h1 class="text-center">{{ isLoginMode ? 'Sign In' : 'Sign Up'}}</h1>
-        <form class="form-signin" (ngSubmit)="onSubmit()" [formGroup]="signinForm" *ngIf="isLoginMode">
+        <form class="form-signin" (ngSubmit)="onSubmit()" [formGroup]="signInForm" *ngIf="isLoginMode">
             <div class="form-group" formGroupName="login">
                 <label for="inputEmail" class="sr-only">Email address</label>
                 <input type="email" 
@@ -18,7 +18,7 @@
                     placeholder="Password"
                     formControlName="password">
             </div>
-            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signinForm.valid" type="submit">{{ isLoginMode ? 'Sign In' : 'Sign Up'}}</button>
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signInForm.valid" type="submit">{{ isLoginMode ? 'Sign In' : 'Sign Up'}}</button>
         </form>
         <form class="form-signin" (ngSubmit)="onSubmit()" [formGroup]="signUpForm" *ngIf="!isLoginMode">
             <div class="form-group" formGroupName="login">
@@ -45,11 +45,11 @@
                     placeholder="Confirm Password"
                     formControlName="confirmPassword">
             </div>
-            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signinForm.valid" type="submit">{{ isLoginMode ? 'Sign In' : 'Sign Up'}}</button>
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signInForm.valid" type="submit">{{ isLoginMode ? 'Sign In' : 'Sign Up'}}</button>
         </form>
     </div>
 </div>
-<div class="row"  *ngIf="false">
+<div class="row">
     <div class="col-xl-12">
         <hr>
         <p class="float-right">

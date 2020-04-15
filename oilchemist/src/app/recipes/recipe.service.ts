@@ -49,7 +49,17 @@ export class RecipeService {
   }
 
 
-  
+  private queryBuilder(ref:any,queryParams: QueryParams){
+    if(queryParams.creator)
+      return ref.where('creator', '==',  queryParams.creator )
+                .orderBy('name', 'asc')
+                .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
+                .limit(12)
+    else
+      return ref.orderBy('name', 'asc')
+                .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
+                .limit(12)
+}
 
   
   setRecipes(recipes: Recipe[]) {
@@ -57,6 +67,7 @@ export class RecipeService {
     this.recipesChanged.next(this.recipes.slice());
   }
 
+  
 
   getRecipes(queryParams:QueryParams ={}) :Observable<any>{
     return this.firestore
@@ -73,9 +84,7 @@ export class RecipeService {
 
               // return ref
                 
-              return ref.orderBy('name', 'asc')
-                        .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
-                        .limit(12)
+              return this.queryBuilder(ref,queryParams)
             }
           )
           .snapshotChanges()
@@ -89,6 +98,7 @@ export class RecipeService {
               map(data=>this.filterSearchResults(data, queryParams.search) )
           )
   }
+
 
   getRecipe(id: string): Observable<any> {
     // return this.recipes[index];

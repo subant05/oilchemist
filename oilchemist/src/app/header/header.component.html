@@ -17,7 +17,8 @@
             <a class="nav-link" [routerLink]="['/account','add-blend']">Add Blend</a>
         </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0"  *ngIf="false || isAuthenticated">
+    <ul class="navbar-nav mr-auto  my-2 my-lg-0 "  *ngIf="!isAuthenticated"></ul>
+    <form class="form-inline my-2 my-lg-0">
         <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="onLogin()" *ngIf="!isAuthenticated">Login</button>
         <button class="btn btn-primary my-2 my-sm-0" type="button" (click)="onLogout()" *ngIf="isAuthenticated">Logout</button>
     </form>
