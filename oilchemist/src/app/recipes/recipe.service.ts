@@ -46,8 +46,8 @@ export class RecipeService {
                   || searchParam.toLocaleLowerCase().includes(obj.name.toLocaleLowerCase()) 
               }).length
               || item.categories.filter((category:any)=> {
-                    category.includes(searchParam) 
-                    || searchParam.toLocaleLowerCase().includes(category.toLocaleLowerCase()) 
+                    return category.includes(searchParam) 
+                      || searchParam.toLocaleLowerCase().includes(category.toLocaleLowerCase()) 
               }).length;
     })
   }
