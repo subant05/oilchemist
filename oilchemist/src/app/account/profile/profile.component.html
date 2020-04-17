@@ -24,7 +24,7 @@
                     <div class="form-group">
                         <input type="text" class="form-control" formControlName="username" *ngIf="isProfileEdit">
                     </div>
-                <div class="card-footer text-muted text-center ">Oil Brands Used</div>
+                <div class="card-footer text-muted text-center ">Oil Brands</div>
                 <ul class="list-group list-group-flush" *ngIf="!isProfileEdit">
                     <li class="list-group-item">
                         <a>Doterra</a>
@@ -68,7 +68,7 @@
                         <button
                         type="button"
                         class="btn btn-outline-primary"
-                        (click)="onAddOilBrand()">Add Oil Brand</button>
+                        (click)="onAddOilBrand()">Add Brand</button>
                     </div>    
                 </div>
 
@@ -84,6 +84,42 @@
                         <a>Relazation</a>
                     </li>
                 </ul>
+                <div class="card-body text-center "  *ngIf="isProfileEdit">
+                    <div>
+                        <div class="col-xs-12" formArrayName="interests">
+                            <div
+                            class="form-row"
+                            *ngFor="let interestsCtrl of interests; let i = index"
+                            style="margin-top: 10px;">
+                                <div class="col-md-8">
+                                    <select 
+                                        [formGroupName]="i"
+                                        class="form-control" 
+                                        id="oil" 
+                                        (change)="onBrandChange($event)">
+                                            <option [value]="interest"  *ngFor="let interest of profileInterests;let i = index" [selected]="!i">{{interest| capitalize}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        (click)="onDeleteInterest(i)">
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"  [style]="{'display': profileForm.get('brands').touched && !profileForm.get('brands').value.length ? 'block' : 'none'}">
+                            Please add an intetest.
+                        </div>
+                        <hr>
+                        <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        (click)="onAddInterest()">Add Interest</button>
+                    </div>    
+                </div>
 
         </div>
         <div class="profileEditButtonArea">

@@ -45,6 +45,10 @@ export class RecipeService {
                   || searchParam.toLocaleLowerCase().includes(obj.brand.toLocaleLowerCase()) 
                   || searchParam.toLocaleLowerCase().includes(obj.name.toLocaleLowerCase()) 
               }).length
+              || item.categories.filter((category:any)=> {
+                    category.includes(searchParam) 
+                    || searchParam.toLocaleLowerCase().includes(category.toLocaleLowerCase()) 
+              }).length;
     })
   }
 

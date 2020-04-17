@@ -25,6 +25,17 @@ export class EditRecipeComponent implements OnInit {
     {value:"doterra", label:"Doterra"}
     , {value:"young living", label:"Young Living"}
   ]
+  recipeCategories:string[] = [
+   "health",
+    "fitness",
+    "relaxation",
+    "cooking",
+    "aroma therapy",
+    "meditation",
+    "beauty",
+    "cleaning",
+    "pets"
+  ]
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
@@ -36,6 +47,10 @@ export class EditRecipeComponent implements OnInit {
     return (<FormArray>this.recipeForm.get('oils')).controls
   }
   
+  get categories(){
+    return (<FormArray>this.recipeForm.get('categories')).controls
+  }
+
   private getUsesFromForm(form){
     return ['Topical','Aromatic','Internal'].map(item=>{
       const tmpObj = {}
@@ -68,8 +83,18 @@ export class EditRecipeComponent implements OnInit {
     );
   }
 
+  onAddCategory() {
+    (<FormArray>this.recipeForm.get('categories')).push(
+      new FormControl('health', [Validators.required])
+    );
+  }
+
   onDeleteOil(index: number) {
     (<FormArray>this.recipeForm.get('oils')).removeAt(index);
+  }
+
+  onDeleteCategory(index: number) {
+    (<FormArray>this.recipeForm.get('categories')).removeAt(index);
   }
 
   private formatFormData(creator:string, imageUrl: string){
@@ -96,8 +121,17 @@ export class EditRecipeComponent implements OnInit {
       }
   }
 
-  onSubmit(event) {
+  onCategoryChange(event: any){
+    if(event.target.value === "other"){
+      event.target.nextElementSibling.value = ""
+      event.target.nextElementSibling.type = "text"
+      event.target.parentNode.removeChild(event.target)
+      
+    }
+}
 
+  onSubmit(event) {
+    debugger;
     if(this.editMode && this.recipe.imageUrl){
       const formData = this.formatFormData(this.recipe.creator, this.recipe.imageUrl)
 
@@ -151,13 +185,14 @@ export class EditRecipeComponent implements OnInit {
       internal:false
     }
     let recipeOilsUsed = new FormArray([],[Validators.required]);
+    let recipeCategoriesForm = new FormArray([], Validators.required)
 
     if (this.editMode && this.recipe) {
       recipeName = this.recipe.name;
       recipeDescription = this.recipe.description;
+      // Oils
       if (this.recipe['oils']) {
         for (let oil of this.recipe.oils) {
-          debugger;
           if(!this.oilBrands.find(item=>{
             return oil.brand === item.value || oil.brand === item.label
           })){
@@ -171,6 +206,15 @@ export class EditRecipeComponent implements OnInit {
             })
           );
         }
+      }
+      // Categories
+      if (this.recipe['categories']) {
+        this.recipe.categories.forEach(category=>{
+          recipeCategoriesForm.push(
+            new FormControl(category, [Validators.required])
+          );
+        })
+
       }
       recipesApplications = {
         topical:this.recipe.uses.topical,
@@ -189,7 +233,8 @@ export class EditRecipeComponent implements OnInit {
         internal: new FormControl(recipesApplications.internal)
       },[Validators.required]),
           
-      oils: recipeOilsUsed
+      oils: recipeOilsUsed,
+      categories: recipeCategoriesForm
     });
 
     this.showForm = true

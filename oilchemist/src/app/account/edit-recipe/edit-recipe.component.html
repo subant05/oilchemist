@@ -66,12 +66,13 @@
                 </div>
             </div>
             <hr>
+            <!-- Brands -->
             <div class="form-group">
-                <label for="oil" class="col-sm-2 col-form-label">Oils</label>
+                <label for="oil" class="col-sm-10 col-form-label">Oils</label>
                 <button
                 type="button"
-                class="btn btn-outline-primary"
-                (click)="onAddOil()">Add Oil</button>
+                class="btn btn-outline-primary btn-sm"
+                (click)="onAddOil()">Add</button>
             </div>
                 <div class="col-xs-12" formArrayName="oils">
                     <div
@@ -106,6 +107,39 @@
                 </div>
             </div>
             <div class="invalid-feedback"  [style]="{'display': recipeForm.get('oils').touched && !recipeForm.get('oils').value.length ? 'block' : 'none'}">
+                Please add an oil to your blend.
+            </div>
+            <hr>
+            <!-- Categories -->
+            <div class="form-group">
+                <label for="oil" class="col-sm-10 col-form-label">Categories</label>
+                <button
+                type="button"
+                class="btn btn-outline-primary btn-sm"
+                (click)="onAddCategory()">Add</button>
+            </div>
+                <div class="col-xs-12" formArrayName="categories">
+                    <div
+                    class="form-row"
+                    *ngFor="let categoriesCtrl of categories; let i = index;"
+                    style="margin-top: 10px;">
+                    <div class="col-md-10">
+                        <select 
+                            [formControlName]="i"
+                            class="form-control" 
+                            id="category" >
+                                <option [value]="category"  *ngFor="let category of recipeCategories">{{category | capitalize}}</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-2">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="onDeleteCategory(i)">X</button>
+                    </div>
+                </div>
+            </div>
+            <div class="invalid-feedback"  [style]="{'display': recipeForm.get('categories').touched && !recipeForm.get('categories').value.length ? 'block' : 'none'}">
                 Please add an oil to your blend.
             </div>
             <hr>

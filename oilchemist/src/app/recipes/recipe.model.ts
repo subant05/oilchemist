@@ -5,6 +5,7 @@ export interface Recipe {
     description:string;
     searchableDescription: string;
     oils:{name:string, brand:string}[];
+    categories?:{value:string, labe:string}[]
     uses:{
         topical:boolean,
         aromatic:boolean,
