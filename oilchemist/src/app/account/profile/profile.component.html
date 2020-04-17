@@ -1,46 +1,107 @@
 <div class="row">
     <!-- Left Side -->
     <div class="col-xs-2 card-wrapper">
+        <form (ngSubmit)="onSubmit()" [formGroup]="profileForm">
         <div class="card shadow-sm text-muted text-center " style="width: 18rem;">
-            <h5 class="card-header text-muted text-center ">
-                Anthony Crawford
-            </h5>
-            <img [src]="" class="card-img-top" alt="">
-            <div class="card-body">
-            <p class="card-text">Lorem Ipsum</p>
-            </div>
-            <div class="card-footer text-muted text-center ">Username</div>
-            <ul class="list-group list-group-flush" >
-                <li class="list-group-item">
-                    <a>subant05</a>
-                </li>
-            </ul>
-            <div class="card-footer text-muted text-center ">Oil Brands Used</div>
-            <ul class="list-group list-group-flush" >
-                <li class="list-group-item">
-                    <a>Doterra</a>
-                </li>
-                <li class="list-group-item">
-                    <a>Young Living</a>
-                </li>
-            </ul>
-            <div class="card-footer text-muted text-center ">Interests</div>
-            <ul class="list-group list-group-flush" >
-                <li class="list-group-item">
-                    <a>Medicinal</a>
-                </li>
-                <li class="list-group-item">
-                    <a>Beauty</a>
-                </li>
-                <li class="list-group-item">
-                    <a>Relazation</a>
-                </li>
-            </ul>
-            <div class="card-footer text-muted text-center ">
-                <div class="btn btn-primary">Edit</div>
-            </div>
+                <h5 class="card-header text-muted text-center ">
+                    <span *ngIf="!isProfileEdit">Anthony Crawford</span>
+                    <input type="text" class="form-control" formControlName="name" *ngIf="isProfileEdit">
+                </h5>
+                <img [src]="" class="card-img-top" alt="">
+                <div class="card-footer text-muted text-center ">Description</div>
+                <div class="card-body">
+                    <p class="card-text" *ngIf="!isProfileEdit">
+                        Lorem Ipsum
+                    </p>
+                    <textarea type="text" class="form-control" formControlName="description" *ngIf="isProfileEdit"></textarea>
+                </div>
+                <div class="card-footer text-muted text-center ">Username</div>
+                    <div class="card-body">
+                        <p class="card-text" *ngIf="!isProfileEdit">
+                            SubantO5
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" formControlName="username" *ngIf="isProfileEdit">
+                    </div>
+                <div class="card-footer text-muted text-center ">Oil Brands Used</div>
+                <ul class="list-group list-group-flush" *ngIf="!isProfileEdit">
+                    <li class="list-group-item">
+                        <a>Doterra</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a>Young Living</a>
+                    </li>
+                </ul>
+                <div class="card-body text-center "  *ngIf="isProfileEdit">
+                    <div>
+                        <div class="col-xs-12" formArrayName="brands">
+                            <div
+                            class="form-row"
+                            *ngFor="let brandsCtrl of brands; let i = index"
+                            style="margin-top: 10px;">
+                                <div class="col-md-8">
+                                    <select 
+                                        [formGroupName]="i"
+                                        class="form-control" 
+                                        id="oil" 
+                                        (change)="onBrandChange($event)">
+                                            <option [value]="brand.value"  *ngFor="let brand of oilBrands;let i = index" [selected]="!i">{{brand.label}}</option>
+                                            <option value="other">Other</option>
+                                    </select>
+                                    <input type="hidden" class="form-control"  [formGroupName]="i">
+                                </div>
+                                <div class="col-xs-2">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        (click)="onDeleteBrand(i)">
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="invalid-feedback"  [style]="{'display': profileForm.get('brands').touched && !profileForm.get('brands').value.length ? 'block' : 'none'}">
+                            Please add an oil brand.
+                        </div>
+                        <hr>
+                        <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        (click)="onAddOilBrand()">Add Oil Brand</button>
+                    </div>    
+                </div>
 
-        </div>    
+                <div class="card-footer text-muted text-center ">Interests</div>
+                <ul class="list-group list-group-flush" *ngIf="!isProfileEdit">
+                    <li class="list-group-item">
+                        <a>Medicinal</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a>Beauty</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a>Relazation</a>
+                    </li>
+                </ul>
+
+        </div>
+        <div class="profileEditButtonArea">
+            <div class="form-row"  *ngIf="isProfileEdit">
+                <div class="col">
+                    <button class="btn btn-primary col-md-12" (click)="onExitEditMode()">Cancel</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-primary col-md-12" (click)="onSubmit()">Save</button>
+                </div>
+            </div>
+            <div class="form-group"  *ngIf="!isProfileEdit">
+                <button class="btn btn-primary col-md-12" (click)="onEnterEditMode()">Edit</button>
+            </div>   
+        </div>
+
+    </form>
+
     </div>
     <!-- Right Side -->
     <div class="col-md-8">

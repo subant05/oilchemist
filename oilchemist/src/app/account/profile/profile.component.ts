@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-profile',
@@ -7,9 +8,55 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfileComponent implements OnInit {
 
+  profileForm: FormGroup;
+  isProfileEdit: boolean = false
+  oilBrands:{label:string, value:string}[] = [
+    {value:"doterra", label:"Doterra"}
+    , {value:"young living", label:"Young Living"}
+  ]
+
   constructor() { }
 
-  ngOnInit(): void {
+  get brands(){
+    return (<FormArray>this.profileForm.get('brands')).controls
   }
 
+  ngOnInit(): void {
+    this.profileForm = new FormGroup({
+      name: new FormControl(null,[Validators.required])
+      , description: new FormControl(null,[Validators.required])
+      , username: new FormControl(null,[Validators.required])
+      , interest: new FormArray([],Validators.required)
+      , brands: new FormArray([],Validators.required)
+    })
+  }
+
+  onEnterEditMode(){
+    this.isProfileEdit = true
+  }
+
+  onExitEditMode(){
+    this.isProfileEdit = false
+  }
+  onAddOilBrand() {
+    (<FormArray>this.profileForm.get('brands')).push(
+      new FormControl('doterra', [Validators.required])
+    );
+  }
+  onBrandChange(event: any){
+    if(event.target.value === "other"){
+      event.target.nextElementSibling.value = ""
+      event.target.nextElementSibling.type = "text"
+      event.target.parentNode.removeChild(event.target)
+      
+    }
+  }
+
+  onDeleteBrand(index: number) {
+    (<FormArray>this.profileForm.get('brands')).removeAt(index);
+  }
+
+  onSubmit(){
+
+  }
 }
