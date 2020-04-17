@@ -23,7 +23,7 @@ export class EditRecipeComponent implements OnInit {
   showForm: boolean = false
   oilBrands:{label:string, value:string}[] = [
     {value:"doterra", label:"Doterra"}
-    , {value:"young living", label:"young living"}
+    , {value:"young living", label:"Young Living"}
   ]
 
   constructor( private route: ActivatedRoute,

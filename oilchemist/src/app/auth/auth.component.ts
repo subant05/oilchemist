@@ -66,7 +66,7 @@ export class AuthComponent implements OnInit {
   onSwitchLoginState(){
     this.isLoginMode = !this.isLoginMode
 
-    if(!this.isLoginMode && !this.signUpForm )
+    if(!this.isLoginMode && !this.signUpForm ){
         this.signUpForm =  new FormGroup({
               login: new FormGroup({
                 email: new FormControl(null,[Validators.email,Validators.required])
@@ -74,6 +74,7 @@ export class AuthComponent implements OnInit {
                 , confirmPassword: new FormControl(null, [Validators.required, this.confirmPasswordValidation.bind(this)])
               })
           })
+    }
   }
 
   
