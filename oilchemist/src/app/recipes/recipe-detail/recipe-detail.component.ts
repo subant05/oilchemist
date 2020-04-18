@@ -14,10 +14,13 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   recipe: Recipe
   Object = Object
+  public defaultPicture
 
   constructor(private recipeService: RecipeService
     , private router: Router
-    , private route: ActivatedRoute ) { }
+    , private route: ActivatedRoute ) {
+      this.defaultPicture = this.recipeService.picture
+     }
   
   ngOnInit(): void {
     this.initSubscription = this.route.params.subscribe((params: Params) => {
