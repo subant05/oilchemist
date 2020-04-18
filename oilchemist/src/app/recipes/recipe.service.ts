@@ -44,11 +44,11 @@ export class RecipeService {
   }
 
   get categories(){
-    return Object.assign([],this.oil_categories)
+    return this.oil_categories
   }
   
   get brands(){
-    return Object.assign({},this.oil_brands);
+    return this.oil_brands;
   }
 
   private filterSearchResults(data:  Recipe[], searchParam: string) : Recipe[]{

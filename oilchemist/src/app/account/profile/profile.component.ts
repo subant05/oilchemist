@@ -11,26 +11,14 @@ export class ProfileComponent implements OnInit {
 
   profileForm: FormGroup;
   isProfileEdit: boolean = false
-  oilBrands:{label:string, value:string}[] = [
-    {value:"doterra", label:"Doterra"}
-    , {value:"young living", label:"Young Living"}
-  ]
+  oilBrands:{label:string, value:string}[] = []
   previousSelectedOilBrand: {label:string, value:string}
-  profileInterests:string[] = [
-    "health",
-     "fitness",
-     "relaxation",
-     "cooking",
-     "aroma therapy",
-     "meditation",
-     "beauty",
-     "cleaning",
-     "pets"
-   ]
+  profileInterests:string[] = []
   previousSelectedInterest: {label:string, value:string}
 
   constructor(private recipeService: RecipeService) {
-    this.recipeService.brands
+    this.oilBrands = this.recipeService.brands
+    this.profileInterests = this.recipeService.categories
    }
 
   get brands(){

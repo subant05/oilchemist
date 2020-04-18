@@ -103,6 +103,7 @@ export class AuthService {
         return this.firestore.collection<any>('profiles').add({
             email: authData.email
             , username: userData.username.toLowerCase()
+            , role: "user"
             , userId: authData.localId
         })
     }
