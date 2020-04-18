@@ -28,9 +28,12 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
       array:[]
     }
   public modalData:Recipe;
+  public defaultPicture
 
   constructor(private recipesService: RecipeService
-    , private authService: AuthService) { }
+    , private authService: AuthService) { 
+      this.defaultPicture =  this.recipesService.picture
+    }
 
   private updateRecipeTracker(data){
     this.recipeTracker.array = this.recipeTracker.array.concat(data)

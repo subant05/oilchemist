@@ -16,14 +16,18 @@ export class RecipesComponent implements OnInit, OnDestroy {
   private loadMoreSubscription: Subscription;
   private initSubscription: Subscription;
 
-  recipeTracker= {
+  public recipeTracker= {
     lastIndex:null,
     length:0,
     array:[]
   }
   public isQuerying = false;
+  public defaultPicture: string;
   
-  constructor(private recipesService: RecipeService) { }
+  constructor(private recipesService: RecipeService) {
+    this.defaultPicture = this.recipesService.picture
+   }
+
   private updateRecipeTracker(data){
     this.recipeTracker.array = this.recipeTracker.array.concat(data)
     this.recipeTracker.length = this.recipeTracker.array.length

@@ -166,7 +166,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   
           }))
         } else {
-          const formData = this.formatFormData(user.id, this.recipeService.picture)
+          const formData = this.formatFormData(user.id, null)
   
           if (this.editMode) {
             this.recipeService.updateRecipe(this.id, formData).then(()=>{

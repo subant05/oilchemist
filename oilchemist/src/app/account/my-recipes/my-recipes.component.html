@@ -29,7 +29,7 @@
             <div class="modal-body">
                 <div class="card mb-3 mx-auto">
                     <h3 class="card-header">{{modalData.name}}</h3>
-                    <img style="width: 100%; display: block;" [src]="modalData.imageUrl" [alt]="modalData.name">
+                    <img style="width: 100%; display: block;" [src]="modalData.imageUrl || defaultPicture" [alt]="modalData.name">
                     <div class="card-body">
                       <p class="card-text text-left">{{modalData.description | capitalize}}</p>
                     </div>
