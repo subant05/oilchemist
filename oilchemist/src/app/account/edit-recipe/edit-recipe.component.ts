@@ -26,17 +26,27 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   fileFormLabel = 'Images Only'
   showForm: boolean = false
   isSubmiting:boolean = false;
-  oilBrands:{label:string, value:string}[] =[]
-  recipeCategories:string[] = []
+  oilBrands:{label:string, value:string}[] = [
+    {value:"doterra", label:"Doterra"}
+    , {value:"young living", label:"Young Living"}
+  ]
+  recipeCategories:string[] = [
+   "health",
+    "fitness",
+    "relaxation",
+    "cooking",
+    "aroma therapy",
+    "meditation",
+    "beauty",
+    "cleaning",
+    "pets"
+  ]
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router,
     private authService: AuthService,
-    private storage: AngularFireStorage) {
-      this.oilBrands = this.recipeService.brands;
-      this.recipeCategories = this.recipeService.categories
-     }
+    private storage: AngularFireStorage) { }
   
   get oils(){
     return (<FormArray>this.recipeForm.get('oils')).controls
