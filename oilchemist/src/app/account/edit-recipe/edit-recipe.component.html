@@ -148,7 +148,7 @@
                     <button class="btn btn-lg btn-primary btn-block" type="button" (click)="onCancel()" >Cancel</button>
                 </div>
                 <div class="col">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid">{{this.editMode ? 'Update' : 'Save'}}</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid || isSubmiting">{{this.editMode ? 'Update' : 'Save'}}</button>
                 </div>
             </div>
         </form>

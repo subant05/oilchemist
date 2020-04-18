@@ -10,18 +10,18 @@ import { Subscription } from 'rxjs';
 })
 export class HeaderComponent implements OnInit {
   isAuthenticated = false
-  userSub: Subscription
+  userSubscription: Subscription
 
   constructor(private router: Router,private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.userSub = this.authService.user.subscribe(user=>{
+    this.userSubscription = this.authService.user.subscribe(user=>{
       this.isAuthenticated = !!user
     })
   }
 
   ngOnDestroy(){
-    this.userSub.unsubscribe()
+    this.userSubscription.unsubscribe()
   }
 
   onLogin(){

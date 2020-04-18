@@ -23,6 +23,7 @@ import { EllipsisPipe } from './_utils/pipes/ellipsis.pipe';
 import { RecipePaginationComponent } from './recipes/recipe-pagination/recipe-pagination.component';
 import { DaysAgoPipe } from './_utils/pipes/days-ago.pipe';
 import { ImagePlaceholderComponent } from './_shared/image-placeholder/image-placeholder.component';
+import { SpinnerComponent } from './_shared/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ImagePlaceholderComponent } from './_shared/image-placeholder/image-pla
     EllipsisPipe,
     RecipePaginationComponent,
     DaysAgoPipe,
-    ImagePlaceholderComponent
+    ImagePlaceholderComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,

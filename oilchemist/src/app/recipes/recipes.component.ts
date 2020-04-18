@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Recipe } from './recipe.model'
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { RecipeService } from './recipe.service';
 import { tap, map, take } from 'rxjs/operators';
 
@@ -10,15 +10,18 @@ import { tap, map, take } from 'rxjs/operators';
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.less']
 })
-export class RecipesComponent implements OnInit {
+export class RecipesComponent implements OnInit, OnDestroy {
+  private searchParams = ''
+  private searchUpdateSubscription: Subscription;
+  private loadMoreSubscription: Subscription;
+  private initSubscription: Subscription;
 
   recipeTracker= {
     lastIndex:null,
     length:0,
     array:[]
   }
-  private searchParams = ''
-  private isQuerying = false;
+  public isQuerying = false;
   
   constructor(private recipesService: RecipeService) { }
   private updateRecipeTracker(data){
@@ -34,15 +37,24 @@ export class RecipesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.recipesService.getRecipes().subscribe(data=>{
+    this.initSubscription = this.recipesService.getRecipes().subscribe(data=>{
       this.updateRecipeTracker(data)
     })
+  }
+
+  ngOnDestroy(){
+    // if(this.searchUpdateSubscription)
+    //   this.searchUpdateSubscription.unsubscribe()
+    // if(this.loadMoreSubscription)
+    //   this.loadMoreSubscription.unsubscribe()
+    // if(this.initSubscription)
+    //   this.initSubscription.unsubscribe()
   }
 
 
   onSearchUpdate(params){
     this.searchParams = params
-    this.recipesService.getRecipes({search:this.searchParams}).subscribe(data=>{
+    this.searchUpdateSubscription = this.recipesService.getRecipes({search:this.searchParams}).subscribe(data=>{
       this.replaceRecipeTracker(data)
     })
   }
@@ -51,7 +63,7 @@ export class RecipesComponent implements OnInit {
     if(this.isQuerying)
       return;
     this.isQuerying = true
-    this.recipesService.getRecipes({
+    this.loadMoreSubscription = this.recipesService.getRecipes({
           search:this.searchParams,
           startAfter:this.recipeTracker.array[this.recipeTracker.length-1].name
         })

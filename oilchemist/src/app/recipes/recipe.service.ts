@@ -23,10 +23,32 @@ export class RecipeService {
   private recipes: Recipe[] = [];
   private url: string = environment.firebase.databaseURL + '/blends.json';
   private recipeCollection: AngularFirestoreCollection<Recipe>;
-
+  private oil_brands:{label:string, value:string}[] = [
+    {value:"doterra", label:"Doterra"}
+    , {value:"young living", label:"Young Living"}
+  ]
+  private oil_categories:string[] = [
+   "health",
+    "fitness",
+    "relaxation",
+    "cooking",
+    "aroma therapy",
+    "meditation",
+    "beauty",
+    "cleaning",
+    "pets"
+  ]
 
   constructor(private http: HttpClient, private firestore: AngularFirestore) { 
     
+  }
+
+  get categories(){
+    return Object.assign([],this.oil_categories)
+  }
+  
+  get brands(){
+    return Object.assign({},this.oil_brands);
   }
 
   private filterSearchResults(data:  Recipe[], searchParam: string) : Recipe[]{

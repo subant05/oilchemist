@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../../recipes/recipe.service';
@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/auth.service'
 import {take, tap} from 'rxjs/operators'
 import { Recipe } from 'src/app/recipes/recipe.model';
 import { element } from 'protractor';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -14,34 +15,28 @@ import { element } from 'protractor';
   templateUrl: './edit-recipe.component.html',
   styleUrls: ['./edit-recipe.component.less']
 })
-export class EditRecipeComponent implements OnInit {
+export class EditRecipeComponent implements OnInit, OnDestroy {
+  private routeParamsSubscription: Subscription
+  private userSubscription: Subscription
+
   id: string;
   editMode = false;
   recipe: Recipe;
   recipeForm: FormGroup;
   fileFormLabel = 'Images Only'
   showForm: boolean = false
-  oilBrands:{label:string, value:string}[] = [
-    {value:"doterra", label:"Doterra"}
-    , {value:"young living", label:"Young Living"}
-  ]
-  recipeCategories:string[] = [
-   "health",
-    "fitness",
-    "relaxation",
-    "cooking",
-    "aroma therapy",
-    "meditation",
-    "beauty",
-    "cleaning",
-    "pets"
-  ]
+  isSubmiting:boolean = false;
+  oilBrands:{label:string, value:string}[] =[]
+  recipeCategories:string[] = []
 
   constructor( private route: ActivatedRoute,
     private recipeService: RecipeService,
     private router: Router,
     private authService: AuthService,
-    private storage: AngularFireStorage) { }
+    private storage: AngularFireStorage) {
+      this.oilBrands = this.recipeService.brands;
+      this.recipeCategories = this.recipeService.categories
+     }
   
   get oils(){
     return (<FormArray>this.recipeForm.get('oils')).controls
@@ -60,7 +55,7 @@ export class EditRecipeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
+    this.routeParamsSubscription = this.route.params.subscribe((params: Params) => {
       this.id = params['id'];
       this.editMode = params['id'] != null;
       if(this.editMode ) {
@@ -72,6 +67,13 @@ export class EditRecipeComponent implements OnInit {
         this.initForm();
       }
     });
+  }
+
+  ngOnDestroy(){
+    if(this.routeParamsSubscription)
+      this.routeParamsSubscription.unsubscribe()
+    if(this.userSubscription )
+      this.userSubscription.unsubscribe()
   }
 
   onAddOil() {
@@ -131,7 +133,12 @@ export class EditRecipeComponent implements OnInit {
 }
 
   onSubmit(event) {
-    debugger;
+    this.isSubmiting = true
+    if(!this.recipeForm.valid){
+      this.isSubmiting = false
+      return
+    }
+
     if(this.editMode && this.recipe.imageUrl){
       const formData = this.formatFormData(this.recipe.creator, this.recipe.imageUrl)
 
@@ -140,7 +147,7 @@ export class EditRecipeComponent implements OnInit {
       })
 
     } else {
-      this.authService.user.pipe(take(1)).subscribe(user=>{
+      this.userSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
         const file = event.target.elements["imageUrl"].files[0];
         const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
         const task = this.storage.upload(filePath, file);

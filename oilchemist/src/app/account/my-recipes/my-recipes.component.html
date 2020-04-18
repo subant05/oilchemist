@@ -62,6 +62,7 @@
         </div>
     </div>
     <app-recipe-pagination (bottom)="onLoadMore()"></app-recipe-pagination>
+    <app-spinner [show]="isQuerying"></app-spinner>
 </div>
 <ng-template #norecipes>
     Please add your recipes

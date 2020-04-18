@@ -26,7 +26,7 @@
                         Please enter your password.
                     </div>
             </div>
-            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signInForm.valid" type="submit">Sign In</button>
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signInForm.valid || isSubmiting" type="submit">Sign In</button>
         </form>
         <form class="form-signin" (ngSubmit)="onSubmit()" [formGroup]="signUpForm" *ngIf="!isLoginMode">
             <div class="form-group" formGroupName="login">
@@ -58,8 +58,16 @@
                     placeholder="Password"
                     formControlName="password"
                     [class]="{'is-invalid': !signUpForm.get('login.password').valid && signUpForm.get('login.password').touched}">
-                    <div class="invalid-feedback">
-                        Password must be at least 6 characters long.
+                    <div class="invalid-feedback" *ngIf="signUpForm.get('login.password').errors">
+                        <div *ngIf="signUpForm.get('login.password').errors.minLength">
+                            Password must be at least 6 characters long.
+                        </div>
+                        <div *ngIf="signUpForm.get('login.password').errors.required">
+                            Password enter a password
+                        </div>
+                        <div *ngIf="signUpForm.get('login.password').errors.pattern">
+                            Password enter a must contain at least 1 capital letter, 1 special character like @, and 1 number.
+                        </div>
                     </div>
             </div>
             <div class="form-group"   formGroupName="login" *ngIf="!isLoginMode">
@@ -97,7 +105,7 @@
                     </div>
             </div>
             <div class="g-recaptcha" data-sitekey="your_site_key"></div>
-            <button class="btn btn-lg btn-primary btn-block" [disabled]="isLoginMode ? !signInForm.valid : !signUpForm.valid" type="submit">Sign Up</button>
+            <button class="btn btn-lg btn-primary btn-block" [disabled]="!signInForm.valid || isSubmiting" type="submit">Sign Up</button>
         </form>
     </div>
 </div>

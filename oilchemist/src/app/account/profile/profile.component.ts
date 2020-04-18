@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms'
+import { RecipeService } from 'src/app/recipes/recipe.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,25 +11,15 @@ export class ProfileComponent implements OnInit {
 
   profileForm: FormGroup;
   isProfileEdit: boolean = false
-  oilBrands:{label:string, value:string}[] = [
-    {value:"doterra", label:"Doterra"}
-    , {value:"young living", label:"Young Living"}
-  ]
+  oilBrands:{label:string, value:string}[] = []
   previousSelectedOilBrand: {label:string, value:string}
-  profileInterests:string[] = [
-    "health",
-     "fitness",
-     "relaxation",
-     "cooking",
-     "aroma therapy",
-     "meditation",
-     "beauty",
-     "cleaning",
-     "pets"
-   ]
+  profileInterests:string[] = []
   previousSelectedInterest: {label:string, value:string}
 
-  constructor() { }
+  constructor(private recipeService: RecipeService) {
+    this.oilBrands = this.recipeService.brands
+    this.profileInterests = this.recipeService.categories;
+   }
 
   get brands(){
     return (<FormArray>this.profileForm.get('brands')).controls

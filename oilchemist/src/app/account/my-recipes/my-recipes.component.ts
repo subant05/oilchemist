@@ -1,18 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RecipeService } from 'src/app/recipes/recipe.service';
 import { Recipe } from 'src/app/recipes/recipe.model';
 import { AuthService } from 'src/app/auth/auth.service';
-import { take, throwIfEmpty } from 'rxjs/operators';
+import { take, throwIfEmpty, ignoreElements } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-my-recipes',
   templateUrl: './my-recipes.component.html',
   styleUrls: ['./my-recipes.component.less']
 })
-export class MyRecipesComponent implements OnInit {
+export class MyRecipesComponent implements OnInit, OnDestroy {
   private searchParams:string =""
-  private isQuerying:boolean= false
+  private loadMoreSubscription: Subscription;
+  private loadMoreRecipeSubscription: Subscription;
+  private searchUpdateSubscription: Subscription;
+  private searchUpdateRecipeSubscription: Subscription;
+  private initAuthUserSubscription: Subscription;
+  private initRecipeSubscription: Subscription;
 
+  public isQuerying:boolean= false
   public recipes: Recipe[] = []
   public Object = Object
   public recipeTracker= {
@@ -38,18 +45,33 @@ export class MyRecipesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.user.pipe(take (1)).subscribe(user=>{
-      this.recipesService.getRecipes({creator: user.id})
+    this.initAuthUserSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
+      this.initRecipeSubscription = this.recipesService.getRecipes({creator: user.id})
       .subscribe(data=>{
         this.updateRecipeTracker(data)
       })
     })
   }
 
+  ngOnDestroy(){
+    if(this.loadMoreSubscription)
+      this.loadMoreSubscription.unsubscribe()
+    if(this.loadMoreRecipeSubscription)
+      this.loadMoreRecipeSubscription.unsubscribe()
+    if(this.searchUpdateSubscription)
+      this.searchUpdateSubscription.unsubscribe()
+    if(this.searchUpdateRecipeSubscription)
+      this.searchUpdateRecipeSubscription.unsubscribe()
+    if(this.initAuthUserSubscription)
+      this.initAuthUserSubscription.unsubscribe()
+    if(this.initRecipeSubscription)
+      this.initRecipeSubscription.unsubscribe()
+  }
+
   onSearchUpdate(params){
     this.searchParams = params
-    this.authService.user.pipe(take (1)).subscribe(user=>{
-      this.recipesService.getRecipes({search:this.searchParams,creator: user.id})
+    this.searchUpdateSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
+      this.searchUpdateRecipeSubscription = this.recipesService.getRecipes({search:this.searchParams,creator: user.id})
       .subscribe(data=>{
         this.replaceRecipeTracker(data)
       })
@@ -64,8 +86,8 @@ export class MyRecipesComponent implements OnInit {
     if(this.isQuerying)
       return;
     this.isQuerying = true
-    this.authService.user.pipe(take (1)).subscribe(user=>{
-      this.recipesService.getRecipes({
+    this.loadMoreSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
+      this.loadMoreRecipeSubscription =this.recipesService.getRecipes({
           search:this.searchParams
           , creator: user.id
           , startAfter:this.recipeTracker.array[this.recipeTracker.length-1].name

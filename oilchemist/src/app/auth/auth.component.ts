@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {FormGroup, FormControl, Validators} from '@angular/forms'
 import { AuthService, AuthResponseData } from './auth.service';
-import {Observable} from 'rxjs'
+import {Observable, Subscription} from 'rxjs'
 import { Router } from '@angular/router';
 import { ConfirmPasswordValidator } from '../_utils/validators/confirm-password'
  
@@ -10,10 +10,14 @@ import { ConfirmPasswordValidator } from '../_utils/validators/confirm-password'
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.less']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
+
+  private verifyUsernameSubscription: Subscription;
+  private verifyEmaileSubscription: Subscription;
+
 
   isLoginMode = true;
-  isLoading = false;
+  isSubmiting = false;
   signInForm: FormGroup;
   signUpForm: FormGroup
   error: string;
@@ -23,7 +27,7 @@ export class AuthComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   private errorHandler(errorRes){
-      this.isLoading = false
+      this.isSubmiting = false
       this.error =  errorRes
       console.log(errorRes)
   }
@@ -56,7 +60,7 @@ export class AuthComponent implements OnInit {
 
   private verifyEmail(control: FormControl): Promise<any> | Observable<any> {
     return new Promise((resolve, reject)=>{
-      this.authService.verifyEmail(control.value.toLowerCase()).subscribe((data)=>{
+      this.verifyEmaileSubscription = this.authService.verifyEmail(control.value.toLowerCase()).subscribe((data)=>{
         if(data.length){
           resolve({emailIsTaken: true})
         } else{
@@ -68,7 +72,7 @@ export class AuthComponent implements OnInit {
 
   private verifyUsername(control: FormControl): Promise<any> | Observable<any> {
     return new Promise((resolve, reject)=>{
-      this.authService.verifyUsername(control.value.toLowerCase()).subscribe((data)=>{
+      this.verifyUsernameSubscription = this.authService.verifyUsername(control.value.toLowerCase()).subscribe((data)=>{
         if(data.length){
           resolve({userNameIsTaken: true})
         } else{
@@ -87,6 +91,13 @@ export class AuthComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(){
+    if(this.verifyUsernameSubscription)
+      this.verifyUsernameSubscription.unsubscribe()
+    if(this.verifyEmaileSubscription)
+      this.verifyEmaileSubscription.unsubscribe()
+  }
+
   onSwitchLoginState(){
     this.isLoginMode = !this.isLoginMode
 
@@ -94,7 +105,10 @@ export class AuthComponent implements OnInit {
         this.signUpForm =  new FormGroup({
               login: new FormGroup({
                 email: new FormControl(null,[Validators.email,Validators.required], [this.verifyEmail.bind(this)])
-                , password: new FormControl(null, [Validators.required, Validators.minLength(6)])
+                , password: new FormControl(null, [
+                                              Validators.required
+                                              , Validators.minLength(6)
+                                              , Validators.pattern(/(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{6,})/)])
                 , confirmPassword: new FormControl(null, [Validators.required, this.confirmPasswordValidation.bind(this)])
                 , username: new FormControl(null, [Validators.required], [this.verifyUsername.bind(this)])
               })
@@ -104,24 +118,23 @@ export class AuthComponent implements OnInit {
 
   
   onSubmit(){
+    this.isSubmiting = true
+    this.error = null
 
     switch(this.isLoginMode){
       case true:
-        if(!this.signInForm.valid)
+        if(!this.signInForm.valid){
+          this.isSubmiting = false
           return;
-
-          this.isLoading = true
-          this.error = null
+        }
           this.login();
 
         break;
       default:
         if(!this.signUpForm.valid){
-          debugger;
+          this.isSubmiting = false
           return;
         }
-          this.isLoading = true
-          this.error = null    
           this.signup();
         break;
     }
@@ -131,11 +144,11 @@ export class AuthComponent implements OnInit {
           this.authService
             .createUserProfile(responseData,this.signUpForm.value.login)
             .then(()=>{
-              this.isLoading = false
+              this.isSubmiting = false
               this.router.navigate(['/account'])
             })
         } else {
-          this.isLoading = false
+          this.isSubmiting = false
           this.router.navigate(['/account'])
         }
       },this.errorHandler.bind(this)
