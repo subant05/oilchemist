@@ -4,9 +4,8 @@ import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from '../../recipes/recipe.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AuthService } from '../../auth/auth.service'
-import {take, tap} from 'rxjs/operators'
+import { take } from 'rxjs/operators'
 import { Recipe } from 'src/app/recipes/recipe.model';
-import { element } from 'protractor';
 import { Subscription } from 'rxjs';
 
 
@@ -159,7 +158,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     } else {
       this.userSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
         const file = event.target.elements["imageUrl"].files[0];
-        const filePath = `image/blends/${new Date().valueOf().toString()}_${file.name}`;
+        const filePath = `image/blends/${Math.random().toFixed(3).toString()}_${new Date(new Date().toUTCString()).valueOf().toString()}_${file.name}`;
         const task = this.storage.upload(filePath, file);
        
         task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{

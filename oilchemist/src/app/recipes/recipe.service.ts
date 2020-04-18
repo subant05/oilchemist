@@ -141,8 +141,8 @@ export class RecipeService {
           .collection<Recipe>('blends').doc(id).update(recipe)
   }
 
-  deleteRecipe(index: number) {
-    this.recipes.splice(index, 1);
-    this.recipesChanged.next(this.recipes.slice());
+  deleteRecipe(id: string,) {
+    return this.firestore
+      .collection<Recipe>('blends').doc(id).delete()
   }
 }

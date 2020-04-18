@@ -1,5 +1,5 @@
 
-<app-recipe-search (search)="onSearchUpdate($event)"></app-recipe-search>
+<app-search (search)="onSearchUpdate($event)"></app-search>
 <div *ngIf="recipeTracker.length; else norecipes">
     <div class="list-group shadow-sm">
         <a class="list-group-item list-group-item-action"  
@@ -55,13 +55,20 @@
                   </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btn-secondary"  data-dismiss="modal" [routerLink]="['/account','edit-blend',modalData.id]">Edit</a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <div class="btn-toolbar justify-content-between recipe-modal-footer" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group justify-content-left" role="group" aria-label="Delete group" (click)="onDelete(modalData.id)">
+                        <button type="button" class="btn btn-danger justify-content-left" data-dismiss="modal">Delete</button>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Edit and Close group">
+                        <a class="btn btn-secondary"  data-dismiss="modal" [routerLink]="['/account','edit-blend',modalData.id]">Edit</a>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
             </div>
         </div>
     </div>
-    <app-recipe-pagination (bottom)="onLoadMore()"></app-recipe-pagination>
+    <app-pagination (bottom)="onLoadMore()"></app-pagination>
     <app-spinner [show]="isQuerying"></app-spinner>
 </div>
 <ng-template #norecipes>

@@ -1,8 +1,8 @@
-<app-recipe-search (search)="onSearchUpdate($event)"></app-recipe-search>
+<app-search (search)="onSearchUpdate($event)"></app-search>
   <!-- Begin Search Results -->
   <div class="row justify-content-md-center" *ngIf="recipeTracker.length; else noresults">
         <app-recipe-card *ngFor="let recipe of recipeTracker.array" [recipe]="recipe"></app-recipe-card>
-        <app-recipe-pagination (bottom)="onLoadMore()"></app-recipe-pagination>
+        <app-pagination (bottom)="onLoadMore()"></app-pagination>
   </div>
   <ng-template #noresults>
     <div class="row">No recipes were found.</div>

@@ -68,8 +68,8 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
       this.initRecipeSubscription.unsubscribe()
   }
 
-  onSearchUpdate(params){
-    this.searchParams = params
+  onSearchUpdate(params?: string){
+    this.searchParams = params || this.searchParams
     this.searchUpdateSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
       this.searchUpdateRecipeSubscription = this.recipesService.getRecipes({search:this.searchParams,creator: user.id})
       .subscribe(data=>{
@@ -80,6 +80,10 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
 
   getDetails(index){
     this.modalData = this.recipeTracker.array[index]
+  }
+
+  onDelete(id:string){
+    this.recipesService.deleteRecipe(id).then(this.onSearchUpdate.bind(this))
   }
 
   onLoadMore(){
