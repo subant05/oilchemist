@@ -8,7 +8,6 @@ import { take } from 'rxjs/operators'
 import { Recipe } from 'src/app/recipes/recipe.model';
 import { Subscription } from 'rxjs';
 
-
 @Component({
   selector: 'app-edit-recipe',
   templateUrl: './edit-recipe.component.html',
@@ -79,7 +78,8 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
     (<FormArray>this.recipeForm.get('oils')).push(
       new FormGroup({
         name: new FormControl(null, Validators.required),
-        brand: new FormControl('doterra', [Validators.required])
+        brand: new FormControl('doterra', [Validators.required]),
+        drops: new FormControl( 1, [Validators.required, Validators.pattern(/[0-9]+/), Validators.min(1)])
       })
     );
   }
@@ -147,13 +147,27 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
     } else {
       this.userSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
-        const file = event.target.elements["imageUrl"].files[0];
-        const filePath = `image/blends/${Math.random().toFixed(3).toString()}_${new Date(new Date().toUTCString()).valueOf().toString()}_${file.name}`;
-        const task = this.storage.upload(filePath, file);
-       
-        task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
-          const formData = this.formatFormData(user.id, downloadURL)
-
+        if(event.target.elements["imageUrl"].files.length){
+          const file = event.target.elements["imageUrl"].files[0];
+          const filePath = `image/blends/${Math.random().toFixed(3).toString()}_${new Date(new Date().toUTCString()).valueOf().toString()}_${file.name}`;
+          const task = this.storage.upload(filePath, file);
+          task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
+            const formData = this.formatFormData(user.id, downloadURL)
+  
+            if (this.editMode) {
+              this.recipeService.updateRecipe(this.id, formData).then(()=>{
+                this.onCancel()
+              })
+            } else{
+              this.recipeService.addRecipe(formData).then(success=>{
+                this.onCancel();
+              });
+            }
+  
+          }))
+        } else {
+          const formData = this.formatFormData(user.id, this.recipeService.picture)
+  
           if (this.editMode) {
             this.recipeService.updateRecipe(this.id, formData).then(()=>{
               this.onCancel()
@@ -164,10 +178,9 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
             });
           }
 
-        }))
+        }
       })
-    }
-
+    } 
 
   }
 
@@ -208,7 +221,8 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
           recipeOilsUsed.push(
             new FormGroup({
               name: new FormControl(oil.name, [Validators.required]),
-              brand: new FormControl(oil.brand, [Validators.required])
+              brand: new FormControl(oil.brand, [Validators.required]),
+              drops: new FormControl(oil.drops ? oil.drops : 1, [Validators.required, Validators.pattern(/[0-9]+/), Validators.min(1)])
             })
           );
         }
@@ -231,7 +245,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
 
     this.recipeForm = new FormGroup({
       name: new FormControl(recipeName, [Validators.required]),
-      description: new FormControl(recipeDescription, [Validators.required]),
+      description: new FormControl(recipeDescription, []),
       imageUrl: new FormControl(recipeImage, []),
       uses: new FormGroup({
         topical: new FormControl(recipesApplications.topical, [Validators.required]),

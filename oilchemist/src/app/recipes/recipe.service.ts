@@ -38,6 +38,7 @@ export class RecipeService {
     "cleaning",
     "pets"
   ]
+  private defaultPicture = "https://firebasestorage.googleapis.com/v0/b/oilchemist-20426.appspot.com/o/image%2Fblends%2Fdefault_picture.jpg?alt=media&token=fa1a7e9d-d112-44aa-b847-d997dd19c1a9"
 
   constructor(private http: HttpClient, private firestore: AngularFirestore) { 
     
@@ -49,6 +50,10 @@ export class RecipeService {
   
   get brands(){
     return this.oil_brands;
+  }
+
+  get picture(){
+    return this.defaultPicture;
   }
 
   private filterSearchResults(data:  Recipe[], searchParam: string) : Recipe[]{

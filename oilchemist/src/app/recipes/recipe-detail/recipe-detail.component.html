@@ -8,7 +8,8 @@
     <ul class="list-group list-group-flush" *ngFor="let oil of recipe.oils; let i = index;">
       <li class="list-group-item">
           <span>{{oil.brand | capitalize}}</span> : 
-          <span>{{oil.name}}</span>
+          <span>{{oil.name}}</span> : 
+          <small class="use badge badge-primary">{{oil.drops}}</small>
       </li>
     </ul>
     <div class="card-footer text-muted text-center ">Usage</div>

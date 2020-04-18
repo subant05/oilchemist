@@ -4,14 +4,14 @@ export interface Recipe {
     searchableName?:string;
     description:string;
     searchableDescription: string;
-    oils:{name:string, brand:string}[];
-    categories?:{value:string, labe:string}[]
+    oils:{name:string, brand:string, drops?:number}[];
+    categories:{value:string, labe:string}[]
     uses:{
         topical:boolean,
         aromatic:boolean,
         internal:boolean
     };
-    imageUrl:string;
+    imageUrl?:string;
     creator:string;
     created: string;
     modified?: string;

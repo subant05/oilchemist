@@ -3,7 +3,7 @@
 
         <form [formGroup]="recipeForm" (ngSubmit)="onSubmit($event)" *ngIf="showForm">
             <div class="form-group">
-                <label for="name" class="col-sm-2 col-form-label">Name</label>
+                <label for="name" class="col-sm-2 col-form-label required">Name</label>
                 <input 
                     type="text" 
                     id="name" 
@@ -16,7 +16,7 @@
                     </div>
             </div>
             <div class="form-group">
-                <label for="description" class="col-sm-2 col-form-label">Description</label>
+                <label for="description" class="col-sm-2 col-form-label required">Description</label>
                 <textarea 
                     id="description" 
                     class="form-control form-control-lg" 
@@ -47,7 +47,7 @@
                         <label class="custom-file-label" for="customFile">{{fileFormLabel}}</label>
                   </div>
             </div>
-            <label class="col-sm-2 col-form-label" for="customFile">Application</label>
+            <label class="col-sm-2 col-form-label required" for="customFile">Application</label>
             <div class="form-group" formGroupName="uses">
                 <div class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" id="Aromatic" name="Aromatic" class="custom-control-input" formControlName="aromatic" value="aromatic">
@@ -68,7 +68,7 @@
             <hr>
             <!-- Brands -->
             <div class="form-group">
-                <label for="oil" class="col-sm-10 col-form-label">Oils</label>
+                <label for="oil" class="col-sm-10 col-form-label required">Oils</label>
                 <button
                 type="button"
                 class="btn btn-outline-primary btn-sm"
@@ -80,7 +80,7 @@
                     *ngFor="let oilCtrl of oils; let i = index"
                     [formGroupName]="i"
                     style="margin-top: 10px;">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <select 
                             class="form-control" 
                             id="oil" 
@@ -89,14 +89,23 @@
                                 <option [value]="brand.value"  *ngFor="let brand of oilBrands">{{brand.label}}</option>
                                 <option value="other" selected>Other</option>
                         </select>
-                        <input type="hidden" class="form-control" formControlName="brand">
+                        <input type="hidden" class="form-control" formControlName="brand" placeholder="Enter oil brand here">
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                       <input
                         type="text"
                         class="form-control"
-                        formControlName="name">
+                        formControlName="name"
+                        placeholder="Name of oil">
                     </div>
+                    <div class="col-md-2">
+                        <input
+                          type="number"
+                          class="form-control"
+                          min="1"
+                          placeholder="Number of drops"
+                          formControlName="drops">
+                      </div>
 
                     <div class="col-xs-2">
                       <button
@@ -112,7 +121,7 @@
             <hr>
             <!-- Categories -->
             <div class="form-group">
-                <label for="oil" class="col-sm-10 col-form-label">Categories</label>
+                <label for="oil" class="col-sm-10 col-form-label required">Categories</label>
                 <button
                 type="button"
                 class="btn btn-outline-primary btn-sm"
@@ -148,7 +157,7 @@
                     <button class="btn btn-lg btn-primary btn-block" type="button" (click)="onCancel()" >Cancel</button>
                 </div>
                 <div class="col">
-                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid || isSubmiting">{{this.editMode ? 'Update' : 'Save'}}</button>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" [disabled]="!recipeForm.valid || isSubmiting || (!recipeForm.get('uses.aromatic').value && !recipeForm.get('uses.topical').value && !recipeForm.get('uses.internal').value )">{{this.editMode ? 'Update' : 'Save'}}</button>
                 </div>
             </div>
         </form>
