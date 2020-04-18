@@ -19,7 +19,7 @@
     </div>
     <!-- Modal -->
     <div *ngIf="modalData" class="modal fade" id="details" tabindex="-1" role="dialog" aria-labelledby="details" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
             <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -45,7 +45,13 @@
                         <li class="list-group-item" *ngIf="modalData.uses[use]">
                             <span>{{use | capitalize}}</span>
                         </li>
-                      </ul>
+                    </ul>
+                    <div class="card-footer text-muted text-center ">Category</div>
+                    <ul class="list-group list-group-flush" *ngFor="let category of modalData.categories">
+                      <li class="list-group-item">
+                          <span>{{category | capitalize}}</span>
+                      </li>
+                    </ul>
                   </div>
             </div>
             <div class="modal-footer">

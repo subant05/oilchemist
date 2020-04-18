@@ -3,9 +3,10 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators'
 import { User } from './user.model';
+import { Profile } from './profile.model';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
-
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 
 export interface AuthResponseData {
@@ -22,9 +23,16 @@ export interface AuthResponseData {
 export class AuthService {
 
     user = new BehaviorSubject<User>(null)
+    private userProfile: Profile;
     autoLogoutTimer: any;
 
-    constructor(private http: HttpClient, private router: Router){}
+    constructor(private http: HttpClient
+        , private router: Router
+        , private firestore: AngularFirestore){}
+
+    get profile() : Profile{
+        return this.userProfile
+    }
 
     private handleError(errorRes: HttpErrorResponse){
         if(!errorRes.error || !errorRes.error.error)
@@ -90,7 +98,32 @@ export class AuthService {
         }
     }
 
-    signup(email: string, password: string): Observable<AuthResponseData> {
+    createUserProfile(authData:any, userData:any): Promise<any>{
+        // Save user profile
+        return this.firestore.collection<any>('profiles').add({
+            email: authData.email
+            , username: userData.username.toLowerCase()
+            , userId: authData.localId
+        })
+    }
+
+    verifyEmail(email:string) :Observable<any>{
+        return this.firestore
+        .collection<any>(
+                    'profiles'
+                    , ref=>ref.where('email', '==',  email.toLocaleLowerCase())
+                ).valueChanges()
+    }
+
+    verifyUsername(username:string) :Observable<any>{
+        return this.firestore
+        .collection<any>(
+                    'profiles'
+                    , ref=>ref.where('username', '==',  username.toLocaleLowerCase())
+                ).valueChanges()
+    }
+
+    signup(email: string, password: string, username?:string): Observable<AuthResponseData> {
        return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebase.apiKey
         , {
             email

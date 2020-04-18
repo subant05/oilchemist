@@ -36,11 +36,20 @@
                     class="form-control" 
                     placeholder="Email address" 
                     formControlName="email"
-                    [class]="{'is-invalid': !signUpForm.get('login.email').valid && signInForm.get('login.email').touched}">
-                    <div class="invalid-feedback">
-                        Please enter a valid email address.
+                    [class]="{'is-invalid': !signUpForm.get('login.email').valid && signUpForm.get('login.email').touched}">
+                    <div class="invalid-feedback" *ngIf="signUpForm.get('login.email').errors">
+                        <div *ngIf="signUpForm.get('login.email').errors.emailIsTaken">
+                            Email Address is already in use.
+                        </div>
+                        <div *ngIf="signUpForm.get('login.email').errors.email">
+                            Please enter a valid email address.
+                        </div>
+                        <div *ngIf="signUpForm.get('login.email').errors.required">
+                            Please enter an email address.
+                        </div>
                     </div>
             </div>
+
             <div class="form-group"  formGroupName="login">
                 <label for="inputPassword" class="sr-only">Password</label>
                 <input type="password" 
@@ -48,7 +57,7 @@
                     class="form-control" 
                     placeholder="Password"
                     formControlName="password"
-                    [class]="{'is-invalid': !signUpForm.get('login.password').valid && signInForm.get('login.password').touched}">
+                    [class]="{'is-invalid': !signUpForm.get('login.password').valid && signUpForm.get('login.password').touched}">
                     <div class="invalid-feedback">
                         Password must be at least 6 characters long.
                     </div>
@@ -61,8 +70,30 @@
                     placeholder="Confirm Password"
                     formControlName="confirmPassword"
                     [class]="{'is-invalid': !signUpForm.get('login.confirmPassword').valid}">
-                    <div class="invalid-feedback" *ngIf="signInForm.get('login.password').touched">
-                         Confirmation password must match the above password.
+                    <div class="invalid-feedback" *ngIf="signUpForm.get('login.confirmPassword').errors">
+                        <div  *ngIf="signUpForm.get('login.confirmPassword').errors.confirmPasswordMatch">
+                            Confirmation password must match the above password.
+                        </div>
+                        <div  *ngIf="signUpForm.get('login.confirmPassword').errors.required">
+                            Confirmation password is required.
+                        </div>
+                    </div>
+            </div>
+            <div class="form-group" formGroupName="login">
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input type="text" 
+                    id="inputUsername" 
+                    class="form-control" 
+                    placeholder="Username" 
+                    formControlName="username"
+                    [class]="{'is-invalid': !signUpForm.get('login.username').valid && signUpForm.get('login.username').touched}">
+                    <div class="invalid-feedback" *ngIf="signUpForm.get('login.username').errors">
+                        <div *ngIf="signUpForm.get('login.username').errors.userNameIsTaken">
+                            Username is taken. Please enter a different username.
+                        </div>
+                        <div *ngIf="signUpForm.get('login.username').errors.required">
+                            Please enter a username.
+                        </div>
                     </div>
             </div>
             <div class="g-recaptcha" data-sitekey="your_site_key"></div>

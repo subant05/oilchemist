@@ -54,6 +54,30 @@ export class AuthComponent implements OnInit {
     return null
   }
 
+  private verifyEmail(control: FormControl): Promise<any> | Observable<any> {
+    return new Promise((resolve, reject)=>{
+      this.authService.verifyEmail(control.value.toLowerCase()).subscribe((data)=>{
+        if(data.length){
+          resolve({emailIsTaken: true})
+        } else{
+          resolve(null)
+        }
+      })
+    })
+  }
+
+  private verifyUsername(control: FormControl): Promise<any> | Observable<any> {
+    return new Promise((resolve, reject)=>{
+      this.authService.verifyUsername(control.value.toLowerCase()).subscribe((data)=>{
+        if(data.length){
+          resolve({userNameIsTaken: true})
+        } else{
+          resolve(null)
+        }
+      })
+    })
+  }
+
   ngOnInit(): void {
     this.signInForm =  new FormGroup({
         login: new FormGroup({
@@ -69,9 +93,10 @@ export class AuthComponent implements OnInit {
     if(!this.isLoginMode && !this.signUpForm ){
         this.signUpForm =  new FormGroup({
               login: new FormGroup({
-                email: new FormControl(null,[Validators.email,Validators.required])
+                email: new FormControl(null,[Validators.email,Validators.required], [this.verifyEmail.bind(this)])
                 , password: new FormControl(null, [Validators.required, Validators.minLength(6)])
                 , confirmPassword: new FormControl(null, [Validators.required, this.confirmPasswordValidation.bind(this)])
+                , username: new FormControl(null, [Validators.required], [this.verifyUsername.bind(this)])
               })
           })
     }
@@ -102,9 +127,17 @@ export class AuthComponent implements OnInit {
     }
 
     this.authObservable.subscribe(responseData=>{
-        console.log(`${this.isLoginMode ? 'You are logged in.' : 'You are Signed Up'}`, responseData)
-        this.isLoading = false
-        this.router.navigate(['/account'])
+        if(!this.isLoginMode){
+          this.authService
+            .createUserProfile(responseData,this.signUpForm.value.login)
+            .then(()=>{
+              this.isLoading = false
+              this.router.navigate(['/account'])
+            })
+        } else {
+          this.isLoading = false
+          this.router.navigate(['/account'])
+        }
       },this.errorHandler.bind(this)
     )
       

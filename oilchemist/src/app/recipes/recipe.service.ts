@@ -63,7 +63,7 @@ export class RecipeService {
       return ref.orderBy('name', 'asc')
                 .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
                 .limit(12)
-}
+  }
 
   
   setRecipes(recipes: Recipe[]) {

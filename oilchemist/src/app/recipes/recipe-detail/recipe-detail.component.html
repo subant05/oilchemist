@@ -13,8 +13,14 @@
     </ul>
     <div class="card-footer text-muted text-center ">Usage</div>
     <ul class="list-group list-group-flush" *ngFor="let use of Object.keys(recipe.uses)">
-        <li class="list-group-item" *ngIf="recipe.uses[use]">
-            <span>{{use | capitalize}}</span>
-        </li>
-      </ul>
+      <li class="list-group-item" *ngIf="recipe.uses[use]">
+          <span>{{use | capitalize}}</span>
+      </li>
+    </ul>
+    <div class="card-footer text-muted text-center ">Category</div>
+    <ul class="list-group list-group-flush" *ngFor="let category of recipe.categories">
+      <li class="list-group-item">
+          <span>{{category | capitalize}}</span>
+      </li>
+    </ul>
   </div>
