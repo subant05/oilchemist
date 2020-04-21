@@ -51,7 +51,7 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
     this.initAuthUserSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
       this.initRecipeSubscription = this.recipesService.getRecipes({creator: user.id})
       .subscribe(data=>{
-        this.updateRecipeTracker(data)
+        this.replaceRecipeTracker(data)
       })
     })
   }
