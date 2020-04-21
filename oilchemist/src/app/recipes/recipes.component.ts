@@ -42,7 +42,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initSubscription = this.recipesService.getRecipes().subscribe(data=>{
-      this.updateRecipeTracker(data)
+      this.replaceRecipeTracker(data)
     })
   }
 
