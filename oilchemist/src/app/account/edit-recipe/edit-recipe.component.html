@@ -68,11 +68,7 @@
             <hr>
             <!-- Brands -->
             <div class="form-group">
-                <label for="oil" class="col-sm-10 col-form-label required">Oils</label>
-                <button
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                (click)="onAddOil()">Add</button>
+                <label for="oil" class="col-sm-12 col-form-label required">Oils</label>
             </div>
                 <div class="col-xs-12" formArrayName="oils">
                     <div
@@ -97,7 +93,11 @@
                         class="form-control"
                         formControlName="name"
                         placeholder="Name of oil">
+                        <div class="invalid-feedback"  [style]="{'display': this.recipeForm.get('oils').touched && !this.recipeForm.get('oils').value[i].name ? 'block' : 'none'}">
+                            Please enter a name for this oil.
+                        </div>
                     </div>
+
                     <div class="col-md-2">
                         <input
                           type="number"
@@ -107,25 +107,27 @@
                           formControlName="drops">
                       </div>
 
-                    <div class="col-xs-2">
+                    <div class="col-md-12">
                       <button
                         type="button"
-                        class="btn btn-secondary"
-                        (click)="onDeleteOil(i)">X</button>
+                        class="btn btn-danger add-button"
+                        (click)="onDeleteOil(i)">Delete {{this.recipeForm.get('oils').value[i].name}}</button>
                     </div>
                 </div>
             </div>
             <div class="invalid-feedback"  [style]="{'display': recipeForm.get('oils').touched && !recipeForm.get('oils').value.length ? 'block' : 'none'}">
                 Please add an oil to your blend.
             </div>
+            <div class="form-group">
+                <button
+                type="button"
+                class="btn btn-outline-primary btn-sm add-button"
+                (click)="onAddOil()">Add Oil</button>
+            </div>
             <hr>
             <!-- Categories -->
             <div class="form-group">
                 <label for="oil" class="col-sm-10 col-form-label required">Categories</label>
-                <button
-                type="button"
-                class="btn btn-outline-primary btn-sm"
-                (click)="onAddCategory()">Add</button>
             </div>
                 <div class="col-xs-12" formArrayName="categories">
                     <div
@@ -140,16 +142,22 @@
                                 <option [value]="category"  *ngFor="let category of recipeCategories">{{category | capitalize}}</option>
                         </select>
                     </div>
-                    <div class="col-xs-2">
+                    <div class="col-md-12">
                       <button
                         type="button"
-                        class="btn btn-secondary"
-                        (click)="onDeleteCategory(i)">X</button>
+                        class="btn btn-danger add-button"
+                        (click)="onDeleteCategory(i)">Delete {{this.recipeForm.get('categories').value[i] }}</button>
                     </div>
                 </div>
             </div>
             <div class="invalid-feedback"  [style]="{'display': recipeForm.get('categories').touched && !recipeForm.get('categories').value.length ? 'block' : 'none'}">
                 Please add an oil to your blend.
+            </div>
+            <div class="form-group">
+                <button
+                type="button"
+                class="btn btn-outline-primary btn-sm add-button"
+                (click)="onAddCategory()">Add Category</button>
             </div>
             <hr>
             <div class="form-row">
