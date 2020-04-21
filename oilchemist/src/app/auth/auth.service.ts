@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators'
 import { User } from './user.model';
-import { Profile } from './profile.model';
+import { Profile } from '../account/profile/profile.model';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -96,16 +96,6 @@ export class AuthService {
             if(!this.autoLogoutTimer)
                 this.autoLogout(user._tokenExpirationDate)
         }
-    }
-
-    createUserProfile(authData:any, userData:any): Promise<any>{
-        // Save user profile
-        return this.firestore.collection<any>('profiles').add({
-            email: authData.email
-            , username: userData.username.toLowerCase()
-            , role: "user"
-            , userId: authData.localId
-        })
     }
 
     verifyEmail(email:string) :Observable<any>{

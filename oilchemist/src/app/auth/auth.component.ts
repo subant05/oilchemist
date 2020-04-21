@@ -3,7 +3,7 @@ import {FormGroup, FormControl, Validators} from '@angular/forms'
 import { AuthService, AuthResponseData } from './auth.service';
 import {Observable, Subscription} from 'rxjs'
 import { Router } from '@angular/router';
-import { ConfirmPasswordValidator } from '../_utils/validators/confirm-password'
+import { ProfileService } from '../account/profile/profile.service'
  
 @Component({
   selector: 'app-auth',
@@ -24,7 +24,9 @@ export class AuthComponent implements OnInit, OnDestroy {
   password:string
   authObservable: Observable<AuthResponseData>
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService
+    , private profileService: ProfileService
+    , private router: Router) { }
 
   private errorHandler(errorRes){
       this.isSubmiting = false
@@ -141,7 +143,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
     this.authObservable.subscribe(responseData=>{
         if(!this.isLoginMode){
-          this.authService
+          this.profileService
             .createUserProfile(responseData,this.signUpForm.value.login)
             .then(()=>{
               this.isSubmiting = false

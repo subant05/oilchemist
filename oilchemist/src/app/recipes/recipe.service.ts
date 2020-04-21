@@ -23,6 +23,7 @@ export class RecipeService {
   private recipes: Recipe[] = [];
   private url: string = environment.firebase.databaseURL + '/blends.json';
   private recipeCollection: AngularFirestoreCollection<Recipe>;
+  private pagination = 27;
   private oil_brands:{label:string, value:string}[] = [
     {value:"doterra", label:"Doterra"}
     , {value:"young living", label:"Young Living"}
@@ -85,11 +86,11 @@ export class RecipeService {
       return ref.where('creator', '==',  queryParams.creator )
                 .orderBy('name', 'asc')
                 .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
-                .limit(12)
+                .limit(this.pagination)
     else
       return ref.orderBy('name', 'asc')
                 .startAfter(queryParams.startAfter ? queryParams.startAfter : '')
-                .limit(12)
+                .limit(this.pagination)
   }
 
   
