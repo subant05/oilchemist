@@ -67,19 +67,20 @@
             </div>
             <hr>
             <!-- Brands -->
-            <div class="form-group">
+            <div class="form-group add-oils-group">
                 <label for="oil" class="col-sm-12 col-form-label required">Oils</label>
             </div>
                 <div class="col-xs-12" formArrayName="oils">
                     <div
-                    class="form-row"
+                    class="form-row add-oil"
                     *ngFor="let oilCtrl of oils; let i = index"
                     [formGroupName]="i"
                     style="margin-top: 10px;">
                     <div class="col-md-4">
+                        <label for="oil_brand_{{i}}" >Select an oil brand.</label>
                         <select 
                             class="form-control" 
-                            id="oil" 
+                            id="oil_brand_{{i}}" 
                             formControlName="brand"
                             (change)="onBrandChange($event)">
                                 <option [value]="brand.value"  *ngFor="let brand of oilBrands">{{brand.label}}</option>
@@ -88,7 +89,9 @@
                         <input type="hidden" class="form-control" formControlName="brand" placeholder="Enter oil brand here">
                     </div>
                     <div class="col-md-4">
+                    <label for="oil_name_{{i}}" >Enter oil name.</label>
                       <input
+                        id="oil_name_{{i}}"
                         type="text"
                         class="form-control"
                         formControlName="name"
@@ -99,7 +102,9 @@
                     </div>
 
                     <div class="col-md-2">
+                        <label for="oil_drops_{{i}}" >Drops.</label>
                         <input
+                          id="oil_drops_{{i}}" 
                           type="number"
                           class="form-control"
                           min="1"
@@ -131,7 +136,7 @@
             </div>
                 <div class="col-xs-12" formArrayName="categories">
                     <div
-                    class="form-row"
+                    class="form-row add-category"
                     *ngFor="let categoriesCtrl of categories; let i = index;"
                     style="margin-top: 10px;">
                     <div class="col-md-10">

@@ -30,10 +30,20 @@ select,
     color: #212529 !important;
     background: transparent;
 }
+
+.btn.btn-outline-primary.btn-sm,
 .btn-outline-primary{
     color: #1a1a1a !important;
+    background-color: #fff;;
     border-color: #1a1a1a !important;
     border: 1px solid #1a1a1a !important;
+
+    &:active,
+    &:visited,
+    &:hover{
+        color: #1a1a1a !important;
+        background-color: #fff;
+    }
 }
 
 .custom-control-input:checked~.custom-control-label:before{
