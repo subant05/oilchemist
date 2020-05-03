@@ -34,7 +34,7 @@
             ],
             "scripts": [
               "src/assets/libraries/js/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "src/assets/libraries/js/bootstrap.min.js"
             ]
           },
           "configurations": {

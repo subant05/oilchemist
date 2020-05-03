@@ -9,9 +9,13 @@ img {
     max-height: 300px;
 }
 
-.col-form-label.required::after {
-    content:"*";
-    color:red;
+.col-form-label {
+    padding-left: 0;
+
+    &.required::after {
+        content:"*";
+        color:red;
+    }
 }
 .add-button{
     margin-top: 10px;
@@ -21,5 +25,16 @@ img {
     &.add-category,
     &.add-oil{
         margin-bottom: 25px;
+        background-color: #eee;
+        padding: 10px;
+        border-radius: 5px;
+    }
+}
+
+.application-checkbox {
+    padding-left: 1.25rem;
+
+    @media screen and (min-width:414px){
+        padding-left: 1.5rem;
     }
 }

@@ -1,6 +1,6 @@
 <div class="col-sm card-wrapper" (click)="onGetDetails()">
     <div class="card shadow-sm" style="width: 18rem;">
-      <h5 class="card-header">{{recipe.name | capitalize}}</h5>
+      <h5 class="card-header">{{recipe.name | capitalize  | ellipsis: 16}}</h5>
       <img [src]="recipe.imageUrl || defaultPicture" class="card-img-top" [alt]="recipe.name">
       <div class="card-body">
         <p class="card-text">{{recipe.description | ellipsis | capitalize}}</p>

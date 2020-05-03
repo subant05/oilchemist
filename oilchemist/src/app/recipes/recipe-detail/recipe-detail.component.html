@@ -1,9 +1,8 @@
 <div class="card mb-3 shadow mx-auto" *ngIf="recipe">
-    <h3 class="card-header">{{recipe.name}} 
-      <span class="badge badge-dark float-right text-right header-badge" *ngIf="creator">
-        {{creator | lowercase}}
-      </span>
-    </h3>  
+    <h3 class="card-header">{{recipe.name  | ellipsis:30}}</h3>  
+    <span class="badge badge-dark float-right text-right header-badge" *ngIf="creator">
+      {{creator | lowercase}}
+    </span>
     <img style="width: 100%; display: block;" [src]="recipe.imageUrl || defaultPicture" [alt]="recipe.name">
     <div class="card-body">
       <p class="card-text text-left">{{recipe.description | capitalize}}</p>
