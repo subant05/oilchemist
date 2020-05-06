@@ -35,11 +35,26 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   private signup(){
-    this.authObservable = this.authService
-                            .signup(
+    this.authService.signup(
                               this.signUpForm.value.login.email
                               ,this.signUpForm.value.login.password
-                            )
+                            ).then((responseData)=>{
+                                this.profileService
+                                  .createUserProfile(responseData,this.signUpForm.value.login)
+                                  .then(()=>{
+                                    this.isSubmiting = false
+                                    this.router.navigate(['/account'])
+                                  }).catch(err=>{
+                                    this.isSubmiting = false
+                                    console.log(err)
+                                    this.signUpForm.reset()
+
+                                  })
+                            }).catch(err=>{
+                              this.isSubmiting = false
+                              console.log(err)
+                              this.signUpForm.reset()
+                            })
   }
 
   private login(){
@@ -47,17 +62,12 @@ export class AuthComponent implements OnInit, OnDestroy {
                               this.signInForm.value.login.email
                               ,this.signInForm.value.login.password
                             ).then((responseData)=>{
-                              if(!this.isLoginMode){
-                                this.profileService
-                                  .createUserProfile(responseData,this.signUpForm.value.login)
-                                  .then(()=>{
-                                    this.isSubmiting = false
-                                    this.router.navigate(['/account'])
-                                  })
-                              } else {
                                 this.isSubmiting = false
                                 this.router.navigate(['/account'])
-                              }
+                            }).catch(err=>{
+                              this.isSubmiting = false
+                              console.log(err)
+                              this.signInForm.reset()
                             })
   }
 
@@ -166,8 +176,6 @@ export class AuthComponent implements OnInit, OnDestroy {
     //     }
     //   },this.errorHandler.bind(this)
     // )
-      
-    this.signInForm.reset()
   }
 
   onClose(){

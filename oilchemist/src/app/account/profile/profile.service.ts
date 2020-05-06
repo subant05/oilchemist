@@ -31,10 +31,10 @@ export class ProfileService {
   createUserProfile(authData:any, userData:any): Promise<any>{
     // Save user profile
       return this.firestore.collection<Profile>('profiles').add({
-          email: authData.email
+          email: authData.user.email
           , username: userData.username.toLowerCase()
           , role: "user"
-          , userId: authData.localId
+          , userId: authData.user.uid
       })
   }
 }

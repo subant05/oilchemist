@@ -117,23 +117,29 @@ export class AuthService {
                 ).valueChanges()
     }
 
-    signup(email: string, password: string, username?:string): Observable<AuthResponseData> {
-       return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebase.apiKey
-        , {
-            email
-            , password
-            , returnSecureToken: true
-        }).pipe(
-            catchError(this.handleError)
-            , tap(resData=>{
-                const _user = this.handleAuthentication(
-                    resData.email
-                    ,resData.localId
-                    ,resData.idToken
-                    , +resData.expiresIn)
-                }
-            ) 
-        )
+    signup(email: string ="", password: string ="", username?:string): Promise<any> {
+        debugger;
+        if(!email ||  !password)
+            return Promise.reject("Not enough data")
+        
+        return this.afAuth.createUserWithEmailAndPassword(email, password)
+    
+    //    return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + environment.firebase.apiKey
+    //     , {
+    //         email
+    //         , password
+    //         , returnSecureToken: true
+    //     }).pipe(
+    //         catchError(this.handleError)
+    //         , tap(resData=>{
+    //             const _user = this.handleAuthentication(
+    //                 resData.email
+    //                 ,resData.localId
+    //                 ,resData.idToken
+    //                 , +resData.expiresIn)
+    //             }
+    //         ) 
+    //     )
     }
 
     login(email: string, password: string): Promise<any> {
