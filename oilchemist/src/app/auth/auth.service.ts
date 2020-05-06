@@ -118,7 +118,6 @@ export class AuthService {
     }
 
     signup(email: string ="", password: string ="", username?:string): Promise<any> {
-        debugger;
         if(!email ||  !password)
             return Promise.reject("Not enough data")
         
