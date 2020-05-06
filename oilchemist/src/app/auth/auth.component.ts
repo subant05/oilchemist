@@ -43,11 +43,23 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   private login(){
-    this.authObservable =  this.authService
-                            .login(
+     this.authService.login(
                               this.signInForm.value.login.email
                               ,this.signInForm.value.login.password
-                            )
+                            ).then((responseData)=>{
+                              console.log(responseData)
+                              if(!this.isLoginMode){
+                                this.profileService
+                                  .createUserProfile(responseData,this.signUpForm.value.login)
+                                  .then(()=>{
+                                    this.isSubmiting = false
+                                    this.router.navigate(['/account'])
+                                  })
+                              } else {
+                                this.isSubmiting = false
+                                this.router.navigate(['/account'])
+                              }
+                            })
   }
 
   private confirmPasswordValidation(control){
@@ -141,20 +153,20 @@ export class AuthComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.authObservable.subscribe(responseData=>{
-        if(!this.isLoginMode){
-          this.profileService
-            .createUserProfile(responseData,this.signUpForm.value.login)
-            .then(()=>{
-              this.isSubmiting = false
-              this.router.navigate(['/account'])
-            })
-        } else {
-          this.isSubmiting = false
-          this.router.navigate(['/account'])
-        }
-      },this.errorHandler.bind(this)
-    )
+    // this.authObservable.subscribe(responseData=>{
+    //     if(!this.isLoginMode){
+    //       this.profileService
+    //         .createUserProfile(responseData,this.signUpForm.value.login)
+    //         .then(()=>{
+    //           this.isSubmiting = false
+    //           this.router.navigate(['/account'])
+    //         })
+    //     } else {
+    //       this.isSubmiting = false
+    //       this.router.navigate(['/account'])
+    //     }
+    //   },this.errorHandler.bind(this)
+    // )
       
     this.signInForm.reset()
   }

@@ -7,6 +7,7 @@ import { Profile } from '../account/profile/profile.model';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment'
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 
 export interface AuthResponseData {
@@ -28,7 +29,8 @@ export class AuthService {
 
     constructor(private http: HttpClient
         , private router: Router
-        , private firestore: AngularFirestore){}
+        , private firestore: AngularFirestore
+        , public afAuth: AngularFireAuth){}
 
     get profile() : Profile{
         return this.userProfile
@@ -75,6 +77,7 @@ export class AuthService {
         localStorage.setItem("userData",JSON.stringify(_user))
         this.user.next(_user)
     }
+
 
     autoLogin(){
         const user: {
@@ -133,32 +136,42 @@ export class AuthService {
         )
     }
 
-    login(email: string, password: string): Observable<AuthResponseData> {
-        return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.firebase.apiKey
-         , {
-             email
-             , password
-             , returnSecureToken: true
-         }).pipe(
-             catchError(this.handleError),
-             tap(resData=>{
-                const _user = this.handleAuthentication(
-                    resData.email
-                    ,resData.localId
-                    ,resData.idToken
-                    , +resData.expiresIn)
-                }
-            ) 
-        )
+    login(email: string, password: string): Promise<any> {
+        return this.afAuth.signInWithEmailAndPassword( email, password).then((resData:any)=>{
+                    const _user = this.handleAuthentication(
+                        resData.email
+                        ,resData.uid
+                        ,resData.idToken
+                        , +resData.expiresIn)
+                        return resData
+                    })
+        // return this.http.post<AuthResponseData>("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + environment.firebase.apiKey
+        //  , {
+        //      email
+        //      , password
+        //      , returnSecureToken: true
+        //  }).pipe(
+        //      catchError(this.handleError),
+        //      tap(resData=>{
+        //         const _user = this.handleAuthentication(
+        //             resData.email
+        //             ,resData.localId
+        //             ,resData.idToken
+        //             , +resData.expiresIn)
+        //         }
+        //     ) 
+        // )
     }
 
     logout(){
-        localStorage.removeItem("userData")
-        if(this.autoLogoutTimer)
-            clearTimeout( this.autoLogoutTimer)
-
-        this.user.next(null)
-        this.router.navigate(['/login'])
+        this.afAuth.signOut().then(result=>{
+            localStorage.removeItem("userData")
+            if(this.autoLogoutTimer)
+                clearTimeout( this.autoLogoutTimer)
+    
+            this.user.next(null)
+            this.router.navigate(['/login'])
+        })
     }
 
     autoLogout(expiresIn: string){

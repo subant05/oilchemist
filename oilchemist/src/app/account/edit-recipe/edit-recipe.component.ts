@@ -146,13 +146,13 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
       })
 
     } else {
-      this.userSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
+      this.userSubscription = this.authService.afAuth.authState.subscribe(user=>{
         if(event.target.elements["imageUrl"].files.length){
           const file = event.target.elements["imageUrl"].files[0];
           const filePath = `image/blends/${Math.random().toFixed(3).toString()}_${new Date(new Date().toUTCString()).valueOf().toString()}_${file.name}`;
           const task = this.storage.upload(filePath, file);
           task.then(data=>data.ref.getDownloadURL().then((downloadURL)=>{
-            const formData = this.formatFormData(user.id, downloadURL)
+            const formData = this.formatFormData(user.uid, downloadURL)
   
             if (this.editMode) {
               this.recipeService.updateRecipe(this.id, formData).then(()=>{
@@ -166,7 +166,7 @@ export class EditRecipeComponent implements OnInit, OnDestroy {
   
           }))
         } else {
-          const formData = this.formatFormData(user.id, null)
+          const formData = this.formatFormData(user.uid, null)
   
           if (this.editMode) {
             this.recipeService.updateRecipe(this.id, formData).then(()=>{

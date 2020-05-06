@@ -48,8 +48,8 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.initAuthUserSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
-      this.initRecipeSubscription = this.recipesService.getRecipes({creator: user.id})
+    this.initAuthUserSubscription = this.authService.afAuth.authState.subscribe(user=>{
+      this.initRecipeSubscription = this.recipesService.getRecipes({creator: user.uid})
       .subscribe(data=>{
         this.replaceRecipeTracker(data)
       })
@@ -93,10 +93,10 @@ export class MyRecipesComponent implements OnInit, OnDestroy {
     if(this.isQuerying)
       return;
     this.isQuerying = true
-    this.loadMoreSubscription = this.authService.user.pipe(take (1)).subscribe(user=>{
+    this.loadMoreSubscription = this.authService.afAuth.authState.subscribe(user=>{
       this.loadMoreRecipeSubscription =this.recipesService.getRecipes({
           search:this.searchParams
-          , creator: user.id
+          , creator: user.uid
           , startAfter:this.recipeTracker.array[this.recipeTracker.length-1].name
         })
         .subscribe(data=>{

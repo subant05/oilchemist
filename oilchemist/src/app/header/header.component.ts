@@ -16,7 +16,7 @@ export class HeaderComponent implements OnInit {
   constructor(private router: Router,private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user.subscribe(user=>{
+    this.userSubscription = this.authService.afAuth.authState.subscribe(user=>{
       this.isAuthenticated = !!user
       this.router.events.subscribe((event: NavigationEnd)=>{
         if(event instanceof NavigationEnd){
