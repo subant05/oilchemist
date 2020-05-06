@@ -25,7 +25,7 @@ export class AuthService {
 
     user = new BehaviorSubject<User>(null)
     private userProfile: Profile;
-    autoLogoutTimer: any;
+    // autoLogoutTimer: any;
 
     constructor(private http: HttpClient
         , private router: Router
@@ -94,11 +94,11 @@ export class AuthService {
             , user._token
             , new Date(user._tokenExpirationDate))
 
-        if(loadedUser.token){
-            this.user.next(loadedUser)
-            if(!this.autoLogoutTimer)
-                this.autoLogout(user._tokenExpirationDate)
-        }
+        // if(loadedUser.token){
+        //     this.user.next(loadedUser)
+        //     if(!this.autoLogoutTimer)
+        //         this.autoLogout(user._tokenExpirationDate)
+        // }
     }
 
     verifyEmail(email:string) :Observable<any>{
@@ -166,24 +166,24 @@ export class AuthService {
     logout(){
         this.afAuth.signOut().then(result=>{
             localStorage.removeItem("userData")
-            if(this.autoLogoutTimer)
-                clearTimeout( this.autoLogoutTimer)
+            // if(this.autoLogoutTimer)
+            //     clearTimeout( this.autoLogoutTimer)
     
             this.user.next(null)
             this.router.navigate(['/login'])
         })
     }
 
-    autoLogout(expiresIn: string){
-        const that = this;
-        const checkLogin = (function R(expiresIn){
-            if(new Date(expiresIn) < new Date()) {
-                this.logout()
-            } else {
-                setTimeout(()=>R.call(this, expiresIn),1000)
-            }
+    // autoLogout(expiresIn: string){
+    //     const that = this;
+    //     const checkLogin = (function R(expiresIn){
+    //         if(new Date(expiresIn) < new Date()) {
+    //             this.logout()
+    //         } else {
+    //             setTimeout(()=>R.call(this, expiresIn),1000)
+    //         }
                 
-        }).call(this,expiresIn)
-    }
+    //     }).call(this,expiresIn)
+    // }
 
 }

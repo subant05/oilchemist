@@ -47,7 +47,6 @@ export class AuthComponent implements OnInit, OnDestroy {
                               this.signInForm.value.login.email
                               ,this.signInForm.value.login.password
                             ).then((responseData)=>{
-                              console.log(responseData)
                               if(!this.isLoginMode){
                                 this.profileService
                                   .createUserProfile(responseData,this.signUpForm.value.login)

@@ -15,7 +15,6 @@ export class AuthGuard implements CanActivate {
         , router: RouterStateSnapshot): boolean | UrlTree | Promise<boolean | UrlTree> | Observable<boolean | UrlTree>{
            return new Promise((resolve, reject)=>{
             this.auth.authState.subscribe((auth)=>{
-                console.log(auth)
                     if(auth)
                          resolve( true)
                     else{
