@@ -1,13 +1,26 @@
+const {
+
+  FIREBASE_API_KEY,
+  FIREBASE_AUTH_DOMAIN,
+  FIREBASE_DATABASE_URL,
+  FIREBASE_PROJECT_ID,
+  FIREBASE_STORAGE_BUCKET,
+  FIREBASE_MESSAGING_SENDER_ID,
+  FIREBASE_APP_ID,
+  FIREBASE_MEASUREMENT_ID,
+} =  process.env
+
 export const environment = {
   production: true,
+  // Production
   firebase:{
-    apiKey: "AIzaSyATxOW1ExUrKppiyZN8InMqrEYPA-G8rFc",
-    authDomain: "oilchemist-20426.firebaseapp.com",
-    databaseURL: "https://oilchemist-20426.firebaseio.com",
-    projectId: "oilchemist-20426",
-    storageBucket: "oilchemist-20426.appspot.com",
-    messagingSenderId: "895604521048",
-    appId: "1:895604521048:web:a78a178d18c4003ae1722d",
-    measurementId: "G-DTXFK3Y4P5"
+    apiKey: FIREBASE_API_KEY,
+    authDomain: FIREBASE_AUTH_DOMAIN,
+    databaseURL:FIREBASE_DATABASE_URL,
+    projectId: FIREBASE_PROJECT_ID,
+    storageBucket: FIREBASE_STORAGE_BUCKET,
+    messagingSenderId:FIREBASE_MESSAGING_SENDER_ID,
+    appId: FIREBASE_APP_ID,
+    measurementId:FIREBASE_MEASUREMENT_ID
   }
 };
